@@ -1,12 +1,10 @@
 package com.dempe.forest.service.handler;
 
-import com.dempe.forest.common.NodeDetails;
-import com.dempe.forest.name.ForestNameService;
-import com.dempe.forest.name.NameService;
-import com.dempe.forest.service.proto.Message;
-import org.apache.curator.x.discovery.ServiceInstance;
+import com.dempe.forest.client.HAClientService;
+import com.dempe.forest.common.proto.Request;
+import com.google.common.collect.Maps;
 
-import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,27 +15,20 @@ import java.util.Collection;
  */
 public class Dispatcher {
 
-    private NameService nameService;
+    private final static Map<String, HAClientService> nameClientMap = Maps.newConcurrentMap();
 
-    public Dispatcher() throws Exception {
-        nameService = new ForestNameService();
+    public void dispatcher(Request request) throws Exception {
+        HAClientService clientService = getClientServiceByName(request.getName());
+        clientService.sendAndWait(request);
     }
 
-
-    public void dispatcher(String key, String name, Message message) throws Exception {
-
-
-        Collection<ServiceInstance<NodeDetails>> serviceInstances = nameService.listByName(name);
-        if (serviceInstances.size() < 1) {
-            return;
+    private HAClientService getClientServiceByName(String name) throws Exception {
+        HAClientService clientService = nameClientMap.get(name);
+        if (clientService == null) {
+            clientService = new HAClientService(name);
+            nameClientMap.put(name, clientService);
         }
-        ServiceInstance<NodeDetails> instance = serviceInstances.iterator().next();
-        send();
-
-
+        return clientService;
     }
 
-    private void send() {
-
-    }
 }

@@ -1,13 +1,12 @@
 package com.dempe.forest.name;
 
-import com.dempe.forest.common.NodeDetails;
+import com.dempe.forest.common.model.NodeDetails;
 import com.google.common.collect.Lists;
 import org.aeonbits.owner.ConfigFactory;
 import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.x.discovery.ServiceDiscovery;
-import org.apache.curator.x.discovery.ServiceDiscoveryBuilder;
-import org.apache.curator.x.discovery.ServiceInstance;
+import org.apache.curator.x.discovery.*;
 import org.apache.curator.x.discovery.details.JsonInstanceSerializer;
+import org.apache.curator.x.discovery.details.ServiceCacheListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +33,17 @@ public class ForestNameService implements NameService {
 
     private ForestNameClient nameClient;
 
+    private ServiceCache serviceCache;
+
+
     public ForestNameService() throws Exception {
         init();
         addCloseShutDownHook();
+    }
+
+    public void start() throws Exception {
+        this.serviceCache.start();
+        this.serviceDiscovery.start();
     }
 
     public void init() throws Exception {
@@ -44,7 +51,12 @@ public class ForestNameService implements NameService {
         zkClient.start();
         JsonInstanceSerializer<NodeDetails> serializer = new JsonInstanceSerializer<NodeDetails>(NodeDetails.class);
         this.serviceDiscovery = ServiceDiscoveryBuilder.builder(NodeDetails.class).client(zkClient).basePath(PATH).serializer(serializer).build();
-        this.serviceDiscovery.start();
+        ServiceCacheBuilder<NodeDetails> nodeDetailsServiceCacheBuilder = serviceDiscovery.serviceCacheBuilder();
+        this.serviceCache = nodeDetailsServiceCacheBuilder.build();
+    }
+
+    public void addServiceCacheListener(ServiceCacheListener listener) {
+        serviceCache.addListener(listener);
     }
 
     @Override
@@ -80,12 +92,19 @@ public class ForestNameService implements NameService {
             @Override
             public void run() {
                 try {
-                    nameClient.close();
+                    close();
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage(), e);
                 }
             }
         }));
+    }
+
+    public void close() throws IOException {
+        nameClient.close();
+        serviceDiscovery.close();
+        serviceCache.close();
+
     }
 
     private NodeDetails getNodeByCfg() {

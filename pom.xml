@@ -11,8 +11,18 @@
     <modules>
         <module>forest-common</module>
         <module>forest-name</module>
+        <module>forest-bus</module>
+        <module>forest-client</module>
         <module>forest-service</module>
     </modules>
+
+
+    <repositories>
+        <repository>
+            <id>nexus-osc-thirdparty</id>
+            <url>http://maven.oschina.net/content/repositories/thirdparty/</url>
+        </repository>
+    </repositories>
 
 
 </project>

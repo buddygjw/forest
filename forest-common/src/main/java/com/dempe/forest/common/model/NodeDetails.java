@@ -1,4 +1,4 @@
-package com.dempe.forest.common;
+package com.dempe.forest.common.model;
 
 /**
  * Created with IntelliJ IDEA.
