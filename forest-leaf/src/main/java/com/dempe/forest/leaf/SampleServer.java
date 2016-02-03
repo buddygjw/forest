@@ -1,4 +1,4 @@
-package com.dempe.forest.service;
+package com.dempe.forest.leaf;
 
 import com.dempe.forest.common.AppConfig;
 import com.dempe.forest.common.server.BootServer;
@@ -21,12 +21,13 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan
 public class SampleServer {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         // 启动spring容器
         ApplicationContext context = new AnnotationConfigApplicationContext(SampleServer.class);
         // 生成开发环境的配置
         AppConfig devConfig = DefConfigFactory.createDEVConfig();
-        Server server = new BootServer(devConfig, context);
-        server.start();
+        BootServer server = new BootServer(devConfig, context);
+        server.registerNameService()
+                .start();
     }
 }

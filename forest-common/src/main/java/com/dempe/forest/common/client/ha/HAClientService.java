@@ -1,5 +1,6 @@
-package com.dempe.forest.common.client;
+package com.dempe.forest.common.client.ha;
 
+import com.dempe.forest.common.client.Client;
 import com.dempe.forest.common.proto.Request;
 import com.dempe.forest.common.proto.Response;
 import org.slf4j.Logger;
@@ -29,15 +30,31 @@ public class HAClientService {
     }
 
     public void sendOnly(Request request) {
-        haForestClient.getClient().sendOnly(request);
+        Client client = haForestClient.getClient();
+        if (client == null) {
+            LOGGER.warn("no available node for request:{}", request);
+            return;
+        }
+        client.sendOnly(request);
+
     }
 
     public Response sendAndWait(Request request) {
-        return haForestClient.getClient().sendAndWait(request);
+        Client client = haForestClient.getClient();
+        if (client == null) {
+            LOGGER.warn("no available node for request:{}", request);
+            return null;
+        }
+        return client.sendAndWait(request);
     }
 
     public Response sendAndWait(Request request, long timeOut) {
-        return haForestClient.getClient().sendAndWait(request, timeOut);
+        Client client = haForestClient.getClient();
+        if (client == null) {
+            LOGGER.warn("no available node for request:{}", request);
+            return null;
+        }
+        return client.sendAndWait(request, timeOut);
     }
 
 

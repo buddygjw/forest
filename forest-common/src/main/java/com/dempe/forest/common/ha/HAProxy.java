@@ -57,12 +57,12 @@ public abstract class HAProxy<T> extends TimerTask {
      * @param strategy
      * @param period
      */
-    public HAProxy(Strategy strategy, long period) throws Exception {
+    public HAProxy(Strategy strategy, String name,long period) throws Exception {
         this.strategy = strategy;
         this.timer = new Timer();
         LOGGER.info("HALBProxy timer check started, period:{}", period);
         this.timer.schedule(this, 1000, period);
-        initServerInstance();
+        initServerInstance(name);
     }
 
 
@@ -181,8 +181,8 @@ public abstract class HAProxy<T> extends TimerTask {
      *
      * @throws Exception
      */
-    public List<NodeDetails> initServerInstance() throws Exception {
-        List<NodeDetails> serverInstances = initServerInstanceList();
+    public List<NodeDetails> initServerInstance(String name) throws Exception {
+        List<NodeDetails> serverInstances = initServerInstanceList(name);
         return initServerInstance(serverInstances);
     }
 
@@ -348,7 +348,7 @@ public abstract class HAProxy<T> extends TimerTask {
      * @return
      * @throws Exception
      */
-    public abstract List<NodeDetails> initServerInstanceList() throws Exception;
+    public abstract List<NodeDetails> initServerInstanceList(String name) throws Exception;
 
     /**
      * 创建可用的服务器的client，由子类实现

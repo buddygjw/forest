@@ -1,10 +1,14 @@
-package com.dempe.forest.common.client;
+package com.dempe.forest.common.client.ha;
 
 import com.dempe.forest.common.NodeDetails;
+import com.dempe.forest.common.client.Client;
+import com.dempe.forest.common.client.ForestClient;
 import com.dempe.forest.common.ha.HAProxy;
 import com.dempe.forest.common.ha.ProxyHandler;
 import com.dempe.forest.common.ha.accessctr.AccessPolicy;
 import com.dempe.forest.common.name.ForestNameService;
+import com.dempe.forest.common.proto.Request;
+import com.dempe.forest.common.proto.Response;
 import com.google.common.collect.Lists;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.state.ConnectionState;
@@ -36,11 +40,8 @@ public class HAForestClient extends HAProxy<Client> {
      * @param period
      */
     public HAForestClient(String name, Strategy strategy, long period) throws Exception {
-        super(strategy, period);
-        this.name = name;
-        forestNameService = new ForestNameService();
-        forestNameService.addServiceCacheListener(new ForestServiceCacheListener());
-        forestNameService.start();
+        super(strategy, name, period);
+
     }
 
     public HAForestClient(String name) throws Exception {
@@ -48,13 +49,18 @@ public class HAForestClient extends HAProxy<Client> {
     }
 
     @Override
-    public List<NodeDetails> initServerInstanceList() throws Exception {
+    public List<NodeDetails> initServerInstanceList(String name) throws Exception {
+        this.name = name;
+        forestNameService = new ForestNameService();
+        forestNameService.addServiceCacheListener(new ForestServiceCacheListener());
+        forestNameService.start();
         List<NodeDetails> list = Lists.newArrayList();
         Collection<ServiceInstance<NodeDetails>> serviceInstances = forestNameService.listByName(name);
         for (ServiceInstance<NodeDetails> serviceInstance : serviceInstances) {
             NodeDetails serverInstance = new NodeDetails();
             serverInstance.setIp(serviceInstance.getAddress());
             serverInstance.setPort(serviceInstance.getPort());
+            list.add(serverInstance);
         }
         return list;
     }
@@ -71,14 +77,11 @@ public class HAForestClient extends HAProxy<Client> {
         return client;
     }
 
-
     class ForestServiceCacheListener implements ServiceCacheListener {
 
         @Override
         public void cacheChanged() {
             LOGGER.info("cache changed");
-
-
         }
 
         @Override

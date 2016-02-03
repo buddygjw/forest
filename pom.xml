@@ -11,15 +11,15 @@
     <modules>
         <module>forest-common</module>
         <module>forest-bus</module>
-        <module>forest-service</module>
+        <module>forest-leaf</module>
     </modules>
 
 
     <!--<repositories>-->
-        <!--<repository>-->
-            <!--<id>nexus-osc-thirdparty</id>-->
-            <!--<url>http://maven.oschina.net/content/repositories/thirdparty/</url>-->
-        <!--</repository>-->
+    <!--<repository>-->
+    <!--<id>nexus-osc-thirdparty</id>-->
+    <!--<url>http://maven.oschina.net/content/repositories/thirdparty/</url>-->
+    <!--</repository>-->
     <!--</repositories>-->
 
 

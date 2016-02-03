@@ -17,8 +17,6 @@ public class Response implements Marshallable {
 
     private int seqId;
 
-    private String uri;
-
     private String result;
 
 
@@ -30,13 +28,6 @@ public class Response implements Marshallable {
         this.seqId = seqId;
     }
 
-    public String getUri() {
-        return uri;
-    }
-
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
 
     public String getResult() {
         return result;
@@ -49,7 +40,6 @@ public class Response implements Marshallable {
     @Override
     public Pack marshal(Pack pack) {
         pack.putInt(seqId);
-        pack.putVarstr(uri);
         pack.putVarstr(result);
         return pack;
     }
@@ -57,8 +47,15 @@ public class Response implements Marshallable {
     @Override
     public Response unmarshal(Unpack unpack) throws IOException {
         seqId = unpack.popInt();
-        uri = unpack.popVarstr();
         result = unpack.popVarstr();
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Response{" +
+                "seqId=" + seqId +
+                ", result='" + result + '\'' +
+                '}';
     }
 }

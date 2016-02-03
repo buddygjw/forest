@@ -2,6 +2,7 @@ package com.dempe.forest.common.server;
 
 
 import com.dempe.forest.common.AppConfig;
+import com.dempe.forest.common.name.ForestNameService;
 import com.dempe.forest.common.server.core.ServerHandlerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -17,6 +18,8 @@ import io.netty.util.concurrent.DefaultThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+
+import java.io.IOException;
 
 /**
  * 框架启动基类
@@ -36,12 +39,14 @@ public class BootServer implements Server {
     private DefaultEventExecutorGroup executorGroup;
     private AppConfig config;
     private ServerContext Servercontext;
+    private ForestNameService forestNameService;
 
 
     public BootServer(AppConfig config, ApplicationContext context) {
         this.config = config;
         this.context = context;
         Servercontext = new ServerContext(config, context);
+
         init();
     }
 
@@ -50,10 +55,18 @@ public class BootServer implements Server {
         executorGroup = new DefaultEventExecutorGroup(4, new DefaultThreadFactory("decode-worker-thread-pool"));
         ChannelInitializer channelInitializer = new ServerHandlerInitializer(Servercontext);
         init(channelInitializer);
+
+    }
+
+    public BootServer registerNameService() throws Exception {
+        forestNameService = new ForestNameService();
+        forestNameService.start();
+        forestNameService.register();
+        return this;
     }
 
 
-    public void start() {
+    public void start() throws IOException {
         try {
             ChannelFuture f = b.bind(config.port()).sync();
             LOGGER.info("server start:{}", config.port());
@@ -78,18 +91,25 @@ public class BootServer implements Server {
     }
 
 
-    public void stop() {
+    public void stop() throws IOException {
         if (bossGroup != null)
             bossGroup.shutdownGracefully();
         if (workerGroup != null)
             workerGroup.shutdownGracefully();
+        if (forestNameService != null) {
+            forestNameService.close();
+        }
     }
 
     public BootServer stopWithJVMShutdown() {
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
-                stop();
+                try {
+                    stop();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage(), e);
+                }
             }
         }));
         return this;

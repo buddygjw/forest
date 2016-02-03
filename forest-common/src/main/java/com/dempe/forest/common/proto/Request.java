@@ -61,7 +61,11 @@ public class Request implements Marshallable {
         if (StringUtils.isBlank(param)) {
             return new JSONObject();
         }
-        return (JSONObject) JSONObject.toJSON(param);
+        return JSONObject.parseObject(param);
+    }
+
+    public void putParaJSON(JSONObject paramJSON) {
+        this.param = paramJSON.toJSONString();
     }
 
     @Override
@@ -80,5 +84,15 @@ public class Request implements Marshallable {
         uri = unpack.popVarstr();
         param = unpack.popVarstr();
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Request{" +
+                "seqId=" + seqId +
+                ", name='" + name + '\'' +
+                ", uri='" + uri + '\'' +
+                ", param='" + param + '\'' +
+                '}';
     }
 }

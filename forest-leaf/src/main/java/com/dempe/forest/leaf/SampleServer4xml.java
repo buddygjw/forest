@@ -1,4 +1,4 @@
-package com.dempe.forest.service;
+package com.dempe.forest.leaf;
 
 
 import com.dempe.forest.common.server.BootServer;
@@ -6,6 +6,8 @@ import com.dempe.forest.common.server.Server;
 import com.dempe.forest.common.uitls.DefConfigFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.io.IOException;
 
 /**
  * 基于spring xml的SampleServer
@@ -16,7 +18,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * To change this template use File | Settings | File Templates.
  */
 public class SampleServer4xml {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // 初始化spring 容器
         ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"application.xml"});
         // 初始化并启动服务

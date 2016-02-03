@@ -1,5 +1,6 @@
 package com.dempe.forest.common.name;
 
+import com.dempe.forest.common.NodeDetails;
 import com.google.common.collect.Lists;
 import org.aeonbits.owner.ConfigFactory;
 import org.apache.curator.framework.CuratorFramework;
@@ -12,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import com.dempe.forest.common.NodeDetails;
 
 /**
  * 进程名称服务
@@ -52,7 +52,7 @@ public class ForestNameService implements NameService {
         JsonInstanceSerializer<NodeDetails> serializer = new JsonInstanceSerializer<NodeDetails>(NodeDetails.class);
         this.serviceDiscovery = ServiceDiscoveryBuilder.builder(NodeDetails.class).client(zkClient).basePath(PATH).serializer(serializer).build();
         ServiceCacheBuilder<NodeDetails> nodeDetailsServiceCacheBuilder = serviceDiscovery.serviceCacheBuilder();
-        this.serviceCache = nodeDetailsServiceCacheBuilder.build();
+        this.serviceCache = nodeDetailsServiceCacheBuilder.name("nameCache").build();
     }
 
     public void addServiceCacheListener(ServiceCacheListener listener) {
@@ -101,9 +101,16 @@ public class ForestNameService implements NameService {
     }
 
     public void close() throws IOException {
-        nameClient.close();
-        serviceDiscovery.close();
-        serviceCache.close();
+        if (nameClient != null) {
+            nameClient.close();
+        }
+        if (serviceDiscovery != null) {
+            serviceDiscovery.close();
+        }
+        if (serviceCache != null) {
+//            serviceCache.close();
+        }
+
 
     }
 
@@ -111,7 +118,7 @@ public class ForestNameService implements NameService {
         NameConfig cfg = ConfigFactory.create(NameConfig.class);
         NodeDetails nodeDetails = new NodeDetails();
         nodeDetails.setName(cfg.name());
-        nodeDetails.setIp(cfg.address());
+        nodeDetails.setIp("localhost");
         nodeDetails.setPort(cfg.port());
         return nodeDetails;
     }

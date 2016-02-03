@@ -1,6 +1,8 @@
 package com.dempe.forest.common.server.core;
 
 
+import com.dempe.forest.common.proto.codec.DefaultEncoder;
+import com.dempe.forest.common.proto.codec.RequestDecoder;
 import com.dempe.forest.common.server.ServerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -24,8 +26,8 @@ public class ServerHandlerInitializer extends ChannelInitializer<SocketChannel> 
     @Override
     public void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
-        pipeline.addLast("RequestDecoder", context.getDecoder().newInstance())
-                .addLast("ResponseEncoder", context.getEncoder().newInstance())
+        pipeline.addLast("RequestDecoder", new RequestDecoder())
+                .addLast("ResponseEncoder", new DefaultEncoder())
                 .addLast("dispatcher", new ProcessorHandler(context))
         ;
     }

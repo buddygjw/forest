@@ -78,7 +78,7 @@ public class ActionTake implements Take<Request, Response> {
      */
     public Response buildResp(int id, Object result) throws IllegalAccessException, InstantiationException,
             ClassNotFoundException {
-        Response resp = context.buildResponse();
+        Response resp = new Response();
         // set请求消息id标识，用于client将Response&Request对应
         resp.setSeqId(id);
         resp.setResult(result.toString());

@@ -1,5 +1,6 @@
 package com.dempe.forest.common.name;
 
+import com.dempe.forest.common.Constants;
 import org.aeonbits.owner.Config;
 
 /**
@@ -13,19 +14,12 @@ import org.aeonbits.owner.Config;
 public interface NameConfig extends Config {
 
     @Key("name")
-    @DefaultValue("forest")
+    @DefaultValue(Constants.FOREST_LEAF_NAME)
     String name();
-
-    @Key("address")
-    @DefaultValue("localhost")
-    String address();
 
     @Key("port")
     @DefaultValue("8888")
     int port();
 
-    @Key("desc")
-    @DefaultValue("")
-    String desc();
 
 }
