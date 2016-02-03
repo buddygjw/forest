@@ -1,11 +1,11 @@
-package com.dempe.forest.client;
+package com.dempe.forest.common.client;
 
 import com.dempe.forest.common.ha.HAProxy;
 import com.dempe.forest.common.ha.ProxyHandler;
 import com.dempe.forest.common.ha.ServerInstance;
 import com.dempe.forest.common.ha.accessctr.AccessPolicy;
 import com.dempe.forest.common.model.NodeDetails;
-import com.dempe.forest.name.ForestNameService;
+import com.dempe.forest.common.name.ForestNameService;
 import com.google.common.collect.Lists;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.state.ConnectionState;
@@ -52,12 +52,10 @@ public class HAForestClient extends HAProxy<Client> {
     public List<ServerInstance> initServerInstanceList() throws Exception {
         List<ServerInstance> list = Lists.newArrayList();
         Collection<ServiceInstance<NodeDetails>> serviceInstances = forestNameService.listByName(name);
-        int index = 0;
         for (ServiceInstance<NodeDetails> serviceInstance : serviceInstances) {
             ServerInstance serverInstance = new ServerInstance();
             serverInstance.setIp(serviceInstance.getAddress());
             serverInstance.setPort(serviceInstance.getPort());
-            index++;
         }
         return list;
     }

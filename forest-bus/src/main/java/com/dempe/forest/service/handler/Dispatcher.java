@@ -1,6 +1,6 @@
 package com.dempe.forest.service.handler;
 
-import com.dempe.forest.client.HAClientService;
+import com.dempe.forest.common.client.HAClientService;
 import com.dempe.forest.common.proto.Request;
 import com.google.common.collect.Maps;
 

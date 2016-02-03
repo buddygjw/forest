@@ -1,4 +1,4 @@
-package com.dempe.forest.name;
+package com.dempe.forest.common.name;
 
 import org.aeonbits.owner.Config;
 

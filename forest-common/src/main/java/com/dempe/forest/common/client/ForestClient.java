@@ -1,4 +1,4 @@
-package com.dempe.forest.client;
+package com.dempe.forest.common.client;
 
 import com.dempe.forest.common.ha.ServerInstance;
 import com.dempe.forest.common.proto.Request;

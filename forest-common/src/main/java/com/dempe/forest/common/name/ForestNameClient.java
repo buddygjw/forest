@@ -1,4 +1,4 @@
-package com.dempe.forest.name;
+package com.dempe.forest.common.name;
 
 import com.dempe.forest.common.model.NodeDetails;
 import org.apache.curator.framework.CuratorFramework;
