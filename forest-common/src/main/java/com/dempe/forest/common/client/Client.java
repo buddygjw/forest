@@ -19,7 +19,7 @@ public interface Client {
 
     public Response sendAndWait(Request request, long timeOut);
 
-    public void sendAndWrite(ChannelHandlerContext ctx, Request request);
+    public void sendForward(ChannelHandlerContext ctx, Request request);
 
 //
 }

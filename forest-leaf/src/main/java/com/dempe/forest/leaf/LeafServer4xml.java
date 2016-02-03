@@ -17,7 +17,7 @@ import java.io.IOException;
  * Time: 10:36
  * To change this template use File | Settings | File Templates.
  */
-public class SampleServer4xml {
+public class LeafServer4xml {
     public static void main(String[] args) throws IOException {
         // 初始化spring 容器
         ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"application.xml"});

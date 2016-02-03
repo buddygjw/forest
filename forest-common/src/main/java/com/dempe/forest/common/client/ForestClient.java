@@ -150,11 +150,20 @@ public class ForestClient implements Client {
         f.channel().writeAndFlush(request);
     }
 
+    /**
+     * 仅仅发现消息，不关心返回
+     * @param request 请求消息
+     */
     @Override
     public void sendOnly(Request request) {
         send(request);
     }
 
+    /**
+     * 发送消息，等消息返回
+     * @param request 请求消息
+     * @return
+     */
     @Override
     public Response sendAndWait(Request request) {
         int id = request.getSeqId();
@@ -170,6 +179,12 @@ public class ForestClient implements Client {
 
     }
 
+    /**
+     * 发送消息并等待返回
+     * @param request 请求消息
+     * @param timeOut 请求超时时间
+     * @return
+     */
     @Override
     public Response sendAndWait(Request request, long timeOut) {
         int id = request.getSeqId();
@@ -185,7 +200,13 @@ public class ForestClient implements Client {
 
     }
 
-    public void sendAndWrite(ChannelHandlerContext ctx, Request request) {
+    /**
+     * 发送消息，并将返回消息写到ctx中
+     *
+     * @param ctx 上下文，用于将response写入对应的channel中
+     * @param request 请求消息
+     */
+    public void sendForward(ChannelHandlerContext ctx, Request request) {
         int id = request.getSeqId();
         if (id == 0) {
             id = idMaker.incrementAndGet();

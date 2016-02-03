@@ -36,6 +36,14 @@ public class BusDispatcherHandler extends ChannelHandlerAdapter {
 
     }
 
+    /**
+     * 根据节点名称获取对应的HAClientService
+     * HAClientService 会选择路由策略选择合适的业务进程，将消息透传
+     *
+     * @param name
+     * @return
+     * @throws Exception
+     */
     private HAClientService getClientServiceByName(String name) throws Exception {
         HAClientService clientService = nameClientMap.get(name);
         if (clientService == null) {

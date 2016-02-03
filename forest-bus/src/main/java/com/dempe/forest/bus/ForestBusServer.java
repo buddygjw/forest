@@ -1,11 +1,11 @@
 package com.dempe.forest.bus;
 
+import com.dempe.forest.bus.handler.BusDispatcherHandler;
 import com.dempe.forest.common.AppConfig;
 import com.dempe.forest.common.proto.codec.DefaultEncoder;
 import com.dempe.forest.common.proto.codec.RequestDecoder;
 import com.dempe.forest.common.server.BootServer;
 import com.dempe.forest.common.uitls.DefConfigFactory;
-import com.dempe.forest.bus.handler.BusDispatcherHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 
 /**
- * Created with IntelliJ IDEA.
+ * 服务总线启动类
  * User: Dempe
  * Date: 2016/1/29
  * Time: 17:40

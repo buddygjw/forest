@@ -64,7 +64,7 @@ public class HAClientService {
             LOGGER.warn("no available node for request:{}", request);
             return;
         }
-        client.sendAndWrite(ctx, request);
+        client.sendForward(ctx, request);
     }
 
 
