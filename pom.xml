@@ -15,12 +15,12 @@
     </modules>
 
 
-    <repositories>
-        <repository>
-            <id>nexus-osc-thirdparty</id>
-            <url>http://maven.oschina.net/content/repositories/thirdparty/</url>
-        </repository>
-    </repositories>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>nexus-osc-thirdparty</id>-->
+            <!--<url>http://maven.oschina.net/content/repositories/thirdparty/</url>-->
+        <!--</repository>-->
+    <!--</repositories>-->
 
 
 </project>

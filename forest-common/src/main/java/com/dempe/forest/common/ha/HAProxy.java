@@ -1,5 +1,6 @@
 package com.dempe.forest.common.ha;
 
+import com.dempe.forest.common.NodeDetails;
 import com.dempe.forest.common.ha.listener.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,11 +44,11 @@ public abstract class HAProxy<T> extends TimerTask {
     /**
      * 可用的服务
      */
-    protected List<ServerInstance> availServers = new CopyOnWriteArrayList<ServerInstance>();
+    protected List<NodeDetails> availServers = new CopyOnWriteArrayList<NodeDetails>();
     /**
      * 不可用的服务
      */
-    protected List<ServerInstance> unAvailServers = new CopyOnWriteArrayList<ServerInstance>();
+    protected List<NodeDetails> unAvailServers = new CopyOnWriteArrayList<NodeDetails>();
 
     private Set<HAListener> listeners = new HashSet<HAListener>();
 
@@ -99,7 +100,7 @@ public abstract class HAProxy<T> extends TimerTask {
      *
      * @param serverInstance
      */
-    private void toUnAvailable(ServerInstance serverInstance) {
+    private void toUnAvailable(NodeDetails serverInstance) {
         availServers.remove(serverInstance);
         this.unAvailServers.add(serverInstance);
         this.notifyHAListener(new ToAvailEvent(this));
@@ -110,7 +111,7 @@ public abstract class HAProxy<T> extends TimerTask {
      *
      * @param serverInstance
      */
-    private void toAvailable(ServerInstance serverInstance) {
+    private void toAvailable(NodeDetails serverInstance) {
         LOGGER.info("unAvailable server：{}", serverInstance.toString());
         if (this.availServers.size() == 0) { //如果可用节点的列表已空,则不需考虑负载的策略
             this.availServers.add(serverInstance);
@@ -140,8 +141,8 @@ public abstract class HAProxy<T> extends TimerTask {
      *
      * @return 服务器信息
      */
-    public ServerInstance getAvailServerInstance() {
-        ServerInstance server = this.availServers.get(getIndex());
+    public NodeDetails getAvailServerInstance() {
+        NodeDetails server = this.availServers.get(getIndex());
         server.incHits();
         return server;
     }
@@ -152,8 +153,8 @@ public abstract class HAProxy<T> extends TimerTask {
      * @param key hash值
      * @return 服务器信息
      */
-    public ServerInstance getAvailServerInstance(String key) {
-        ServerInstance server = this.availServers.get(getIndex(key));
+    public NodeDetails getAvailServerInstance(String key) {
+        NodeDetails server = this.availServers.get(getIndex(key));
         server.incHits();
         return server;
     }
@@ -165,7 +166,7 @@ public abstract class HAProxy<T> extends TimerTask {
     private void initLoadBalance() {
         int[] weights = new int[this.availServers.size()];
         for (int i = 0; i < this.availServers.size(); i++) {
-            ServerInstance serverInfo = this.availServers.get(i);
+            NodeDetails serverInfo = this.availServers.get(i);
             weights[i] = serverInfo.getWeight();
         }
         if (Strategy.WRR == strategy) {
@@ -180,8 +181,8 @@ public abstract class HAProxy<T> extends TimerTask {
      *
      * @throws Exception
      */
-    public List<ServerInstance> initServerInstance() throws Exception {
-        List<ServerInstance> serverInstances = initServerInstanceList();
+    public List<NodeDetails> initServerInstance() throws Exception {
+        List<NodeDetails> serverInstances = initServerInstanceList();
         return initServerInstance(serverInstances);
     }
 
@@ -190,7 +191,7 @@ public abstract class HAProxy<T> extends TimerTask {
      *
      * @throws Exception
      */
-    public List<ServerInstance> initServerInstance(List<ServerInstance> availServer) {
+    public List<NodeDetails> initServerInstance(List<NodeDetails> availServer) {
         if (availServer != null) {
             this.availServers.clear();
             availServers.addAll(availServer);
@@ -199,8 +200,8 @@ public abstract class HAProxy<T> extends TimerTask {
         return this.availServers;
     }
 
-    public void reloadServerInstance(List<ServerInstance> serverInstanceList) {
-        for (ServerInstance serverInstance : serverInstanceList) {
+    public void reloadServerInstance(List<NodeDetails> serverInstanceList) {
+        for (NodeDetails serverInstance : serverInstanceList) {
             if (availServers.contains(serverInstance) || unAvailServers.contains(serverInstance)) {
                 continue;
             }
@@ -216,7 +217,7 @@ public abstract class HAProxy<T> extends TimerTask {
      * @return
      * @throws Exception
      */
-    public T getClient(ServerInstance<T> serverInstance) {
+    public T getClient(NodeDetails<T> serverInstance) {
         LOGGER.debug("getClient serverInfo:{}", serverInstance);
         T server = serverInstance.getClient();
         try {
@@ -280,7 +281,7 @@ public abstract class HAProxy<T> extends TimerTask {
         if (client == null) {
             throw new IllegalArgumentException("client can't be null");
         }
-        for (ServerInstance serverInstance : this.availServers) {
+        for (NodeDetails serverInstance : this.availServers) {
             if (client.equals(serverInstance.getClient())) {
                 LOGGER.info("goto changeClient serverInstance:{}", serverInstance);
                 return changeClient(serverInstance);
@@ -295,7 +296,7 @@ public abstract class HAProxy<T> extends TimerTask {
      * @param serverInstance
      * @return
      */
-    public T changeClient(ServerInstance serverInstance) {
+    public T changeClient(NodeDetails serverInstance) {
         if (availServers.size() > 0) {
             toUnAvailable(serverInstance);
         }
@@ -319,7 +320,7 @@ public abstract class HAProxy<T> extends TimerTask {
         if (null != unAvailServers) {
             int availSize = availServers == null ? 0 : availServers.size();
             LOGGER.debug("HA check availSize:{}, unAvailableSize:{}", availSize, unAvailServers.size());
-            for (ServerInstance serverInstance : unAvailServers) {
+            for (NodeDetails serverInstance : unAvailServers) {
                 T server = null;
                 try {
                     server = getClient(serverInstance);
@@ -347,7 +348,7 @@ public abstract class HAProxy<T> extends TimerTask {
      * @return
      * @throws Exception
      */
-    public abstract List<ServerInstance> initServerInstanceList() throws Exception;
+    public abstract List<NodeDetails> initServerInstanceList() throws Exception;
 
     /**
      * 创建可用的服务器的client，由子类实现
@@ -356,7 +357,7 @@ public abstract class HAProxy<T> extends TimerTask {
      * @return
      * @throws Exception
      */
-    public abstract T createClient(ServerInstance serverInstance) throws Exception;
+    public abstract T createClient(NodeDetails serverInstance) throws Exception;
 
     public void addHAListener(HAListener listener) {
         listeners.add(listener);

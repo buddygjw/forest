@@ -1,5 +1,11 @@
 package com.dempe.forest.common.proto;
 
+import com.dempe.forest.common.uitls.pack.Marshallable;
+import com.dempe.forest.common.uitls.pack.Pack;
+import com.dempe.forest.common.uitls.pack.Unpack;
+
+import java.io.IOException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Dempe
@@ -7,13 +13,14 @@ package com.dempe.forest.common.proto;
  * Time: 11:27
  * To change this template use File | Settings | File Templates.
  */
-public class Response {
+public class Response implements Marshallable {
 
     private int seqId;
 
-    private String key;
+    private String uri;
 
-    private String jsonStr;
+    private String result;
+
 
     public int getSeqId() {
         return seqId;
@@ -23,19 +30,35 @@ public class Response {
         this.seqId = seqId;
     }
 
-    public String getKey() {
-        return key;
+    public String getUri() {
+        return uri;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
-    public String getJsonStr() {
-        return jsonStr;
+    public String getResult() {
+        return result;
     }
 
-    public void setJsonStr(String jsonStr) {
-        this.jsonStr = jsonStr;
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    @Override
+    public Pack marshal(Pack pack) {
+        pack.putInt(seqId);
+        pack.putVarstr(uri);
+        pack.putVarstr(result);
+        return pack;
+    }
+
+    @Override
+    public Response unmarshal(Unpack unpack) throws IOException {
+        seqId = unpack.popInt();
+        uri = unpack.popVarstr();
+        result = unpack.popVarstr();
+        return this;
     }
 }

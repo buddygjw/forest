@@ -1,5 +1,13 @@
 package com.dempe.forest.common.proto;
 
+import com.alibaba.fastjson.JSONObject;
+import com.dempe.forest.common.uitls.pack.Marshallable;
+import com.dempe.forest.common.uitls.pack.Pack;
+import com.dempe.forest.common.uitls.pack.Unpack;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.IOException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Dempe
@@ -7,15 +15,15 @@ package com.dempe.forest.common.proto;
  * Time: 11:27
  * To change this template use File | Settings | File Templates.
  */
-public class Request {
+public class Request implements Marshallable {
 
     private int seqId;
 
     private String name;
 
-    private String key;
+    private String uri;
 
-    private String jsonStr;
+    private String param;
 
     public int getSeqId() {
         return seqId;
@@ -33,19 +41,44 @@ public class Request {
         this.name = name;
     }
 
-    public String getKey() {
-        return key;
+    public String getUri() {
+        return uri;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
-    public String getJsonStr() {
-        return jsonStr;
+    public String getParam() {
+        return param;
     }
 
-    public void setJsonStr(String jsonStr) {
-        this.jsonStr = jsonStr;
+    public void setParam(String param) {
+        this.param = param;
+    }
+
+    public JSONObject paramJSON() {
+        if (StringUtils.isBlank(param)) {
+            return new JSONObject();
+        }
+        return (JSONObject) JSONObject.toJSON(param);
+    }
+
+    @Override
+    public Pack marshal(Pack pack) {
+        pack.putInt(seqId);
+        pack.putVarstr(name);
+        pack.putVarstr(uri);
+        pack.putVarstr(param);
+        return pack;
+    }
+
+    @Override
+    public Request unmarshal(Unpack unpack) throws IOException {
+        seqId = unpack.popInt();
+        name = unpack.popVarstr();
+        uri = unpack.popVarstr();
+        param = unpack.popVarstr();
+        return this;
     }
 }

@@ -1,4 +1,4 @@
-package com.dempe.forest.common.ha;
+package com.dempe.forest.common;
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,7 +7,9 @@ package com.dempe.forest.common.ha;
  * Time: 20:28
  * To change this template use File | Settings | File Templates.
  */
-public class ServerInstance<T> {
+public class NodeDetails<T> {
+
+    private String name;
 
     /**
      * 权重
@@ -38,7 +40,7 @@ public class ServerInstance<T> {
      */
     private boolean isDefault;
 
-    public ServerInstance() {
+    public NodeDetails() {
 
     }
 
@@ -48,7 +50,7 @@ public class ServerInstance<T> {
      * @param ip   地址
      * @param port 端口
      */
-    public ServerInstance(String ip, int port) {
+    public NodeDetails(String ip, int port) {
         this.ip = ip;
         this.port = port;
     }
@@ -61,11 +63,18 @@ public class ServerInstance<T> {
      * @param port   端口
      * @param weight 权重
      */
-    public ServerInstance(String ip, int port, int weight) {
+    public NodeDetails(String ip, int port, int weight) {
         this(ip, port);
         this.weight = weight;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getIp() {
         return ip;
@@ -136,7 +145,7 @@ public class ServerInstance<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ServerInstance that = (ServerInstance) o;
+        NodeDetails that = (NodeDetails) o;
         if (that.getIp() == getIp() && that.getPort() == getPort()) {
             return true;
         }

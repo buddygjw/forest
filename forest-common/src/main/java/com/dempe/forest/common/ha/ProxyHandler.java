@@ -1,6 +1,7 @@
 package com.dempe.forest.common.ha;
 
 
+import com.dempe.forest.common.NodeDetails;
 import com.dempe.forest.common.ha.accessctr.AccessPolicy;
 import com.dempe.forest.common.ha.exception.IgnoreException;
 import com.dempe.forest.common.ha.listener.HAEvent;
@@ -72,7 +73,7 @@ public class ProxyHandler<T> implements InvocationHandler {
             if (ex.getCause() instanceof IgnoreException) {
                 // no changeClient
             } else {
-                ServerInstance instance = (ServerInstance) this.targetCreator;
+                NodeDetails instance = (NodeDetails) this.targetCreator;
                 String ip = instance.getIp();
                 int port = instance.getPort();
                 LOGGER.info("Thread name:{}, invoke exception ip:{}, port:{}, method:{}",

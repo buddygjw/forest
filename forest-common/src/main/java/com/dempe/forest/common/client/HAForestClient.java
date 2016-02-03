@@ -1,10 +1,9 @@
 package com.dempe.forest.common.client;
 
+import com.dempe.forest.common.NodeDetails;
 import com.dempe.forest.common.ha.HAProxy;
 import com.dempe.forest.common.ha.ProxyHandler;
-import com.dempe.forest.common.ha.ServerInstance;
 import com.dempe.forest.common.ha.accessctr.AccessPolicy;
-import com.dempe.forest.common.model.NodeDetails;
 import com.dempe.forest.common.name.ForestNameService;
 import com.google.common.collect.Lists;
 import org.apache.curator.framework.CuratorFramework;
@@ -49,11 +48,11 @@ public class HAForestClient extends HAProxy<Client> {
     }
 
     @Override
-    public List<ServerInstance> initServerInstanceList() throws Exception {
-        List<ServerInstance> list = Lists.newArrayList();
+    public List<NodeDetails> initServerInstanceList() throws Exception {
+        List<NodeDetails> list = Lists.newArrayList();
         Collection<ServiceInstance<NodeDetails>> serviceInstances = forestNameService.listByName(name);
         for (ServiceInstance<NodeDetails> serviceInstance : serviceInstances) {
-            ServerInstance serverInstance = new ServerInstance();
+            NodeDetails serverInstance = new NodeDetails();
             serverInstance.setIp(serviceInstance.getAddress());
             serverInstance.setPort(serviceInstance.getPort());
         }
@@ -62,7 +61,7 @@ public class HAForestClient extends HAProxy<Client> {
 
 
     @Override
-    public Client createClient(ServerInstance serverInstance) throws Exception {
+    public Client createClient(NodeDetails serverInstance) throws Exception {
         /**
          *1s accessPolicy=5次发送失败则会自动切换client
          */

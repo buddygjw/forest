@@ -1,6 +1,6 @@
 package com.dempe.forest.common.client;
 
-import com.dempe.forest.common.ha.ServerInstance;
+import com.dempe.forest.common.NodeDetails;
 import com.dempe.forest.common.proto.Request;
 import com.dempe.forest.common.proto.Response;
 
@@ -24,7 +24,7 @@ public class ForestClient implements Client {
         this.port = port;
     }
 
-    public ForestClient(ServerInstance serverInstance) {
+    public ForestClient(NodeDetails serverInstance) {
         this(serverInstance.getIp(), serverInstance.getPort());
     }
 

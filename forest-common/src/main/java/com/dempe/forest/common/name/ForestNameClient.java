@@ -1,6 +1,6 @@
 package com.dempe.forest.common.name;
 
-import com.dempe.forest.common.model.NodeDetails;
+import com.dempe.forest.common.NodeDetails;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.utils.CloseableUtils;
 import org.apache.curator.x.discovery.ServiceDiscovery;
@@ -29,7 +29,7 @@ public class ForestNameClient implements Closeable {
         UriSpec uriSpec = new UriSpec("{scheme}://{address}:{port}");
         thisInstance = ServiceInstance.<NodeDetails>builder().name(nodeDetails.getName()).payload(nodeDetails)
                 .port(nodeDetails.getPort()) // in a real application,
-                .address(nodeDetails.getAddress())
+                .address(nodeDetails.getIp())
                 .uriSpec(uriSpec).build();
         // if you mark your payload class with @JsonRootName the provided
         // JsonInstanceSerializer will work

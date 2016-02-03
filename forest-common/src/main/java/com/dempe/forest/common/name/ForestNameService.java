@@ -1,6 +1,5 @@
 package com.dempe.forest.common.name;
 
-import com.dempe.forest.common.model.NodeDetails;
 import com.google.common.collect.Lists;
 import org.aeonbits.owner.ConfigFactory;
 import org.apache.curator.framework.CuratorFramework;
@@ -13,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import com.dempe.forest.common.NodeDetails;
 
 /**
  * 进程名称服务
@@ -111,9 +111,8 @@ public class ForestNameService implements NameService {
         NameConfig cfg = ConfigFactory.create(NameConfig.class);
         NodeDetails nodeDetails = new NodeDetails();
         nodeDetails.setName(cfg.name());
-        nodeDetails.setAddress(cfg.address());
+        nodeDetails.setIp(cfg.address());
         nodeDetails.setPort(cfg.port());
-        nodeDetails.setDesc(cfg.desc());
         return nodeDetails;
     }
 }
