@@ -2,11 +2,11 @@ package com.dempe.forest.leaf.simulator;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dempe.forest.common.Constants;
-import com.dempe.forest.common.client.ForestClient;
 import com.dempe.forest.common.client.ha.HAClientService;
-import com.dempe.forest.common.client.ha.HAForestClient;
 import com.dempe.forest.common.proto.Request;
 import com.dempe.forest.common.proto.Response;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,9 +19,15 @@ public class LeafSimulator {
 
     public static void main(String[] args) throws Exception {
         HAClientService clientService = new HAClientService(Constants.FOREST_BUS_NAME);
-        Request request = buildReq();
-        Response response = clientService.sendAndWait(request);
-        System.out.println(response);
+        for (int i = 0; i < 10000; i++) {
+
+            Request request = buildReq();
+            Response response = clientService.sendAndWait(request);
+            System.out.println(response);
+            if (i % 10 == 0) {
+                TimeUnit.SECONDS.sleep(1);
+            }
+        }
     }
 
     public static Request buildReq() {

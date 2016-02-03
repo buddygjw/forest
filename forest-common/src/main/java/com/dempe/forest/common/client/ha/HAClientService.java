@@ -3,6 +3,7 @@ package com.dempe.forest.common.client.ha;
 import com.dempe.forest.common.client.Client;
 import com.dempe.forest.common.proto.Request;
 import com.dempe.forest.common.proto.Response;
+import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +56,15 @@ public class HAClientService {
             return null;
         }
         return client.sendAndWait(request, timeOut);
+    }
+
+    public void sendAndWrite(ChannelHandlerContext ctx, Request request) {
+        Client client = haForestClient.getClient();
+        if (client == null) {
+            LOGGER.warn("no available node for request:{}", request);
+            return;
+        }
+        client.sendAndWrite(ctx, request);
     }
 
 

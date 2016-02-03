@@ -2,7 +2,6 @@ package com.dempe.forest.leaf.handler;
 
 import com.dempe.forest.common.client.ha.HAClientService;
 import com.dempe.forest.common.proto.Request;
-import com.dempe.forest.common.proto.Response;
 import com.google.common.collect.Maps;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
@@ -39,9 +38,7 @@ public class BusDispatcherHandler extends ChannelHandlerAdapter {
             Request request = (Request) msg;
             LOGGER.info("dispatcher request = {}", request);
             HAClientService clientService = getClientServiceByName(request.getName());
-            Response response = clientService.sendAndWait(request);
-            LOGGER.info("response={}", response);
-            ctx.writeAndFlush(response);
+            clientService.sendAndWrite(ctx, request);
         }
 
 

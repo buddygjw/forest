@@ -157,31 +157,42 @@ public class ForestClient implements Client {
 
     @Override
     public Response sendAndWait(Request request) {
-        int id = idMaker.incrementAndGet();
-        request.setSeqId(id);
-        try {
-            ReplyFuture future = new ReplyFuture(id);
-            replyQueue.add(future);
-            send(request);
-            return future.getReply();
-        } finally {
-            replyQueue.remove(id);
+        int id = request.getSeqId();
+        if (id == 0) {
+            id = idMaker.incrementAndGet();
+            request.setSeqId(id);
         }
+        ReplyFuture future = new ReplyFuture(id);
+        replyQueue.add(future);
+        send(request);
+        return future.getReply();
+
 
     }
 
     @Override
     public Response sendAndWait(Request request, long timeOut) {
-        int id = idMaker.incrementAndGet();
-        request.setSeqId(id);
-        try {
-            ReplyFuture future = new ReplyFuture(id);
-            replyQueue.add(future);
-            future.setReadTimeoutMillis(timeOut);
-            send(request);
-            return future.getReply();
-        } finally {
-            replyQueue.remove(id);
+        int id = request.getSeqId();
+        if (id == 0) {
+            id = idMaker.incrementAndGet();
+            request.setSeqId(id);
         }
+        ReplyFuture future = new ReplyFuture(id);
+        replyQueue.add(future);
+        future.setReadTimeoutMillis(timeOut);
+        send(request);
+        return future.getReply();
+
+    }
+
+    public void sendAndWrite(ChannelHandlerContext ctx, Request request) {
+        int id = request.getSeqId();
+        if (id == 0) {
+            id = idMaker.incrementAndGet();
+            request.setSeqId(id);
+        }
+        ReplyFuture future = new ReplyFuture(ctx, id);
+        replyQueue.add(future);
+        send(request);
     }
 }

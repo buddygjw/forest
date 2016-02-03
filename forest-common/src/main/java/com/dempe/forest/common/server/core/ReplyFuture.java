@@ -1,6 +1,7 @@
 package com.dempe.forest.common.server.core;
 
 import com.dempe.forest.common.proto.Response;
+import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,10 +22,18 @@ public class ReplyFuture {
 
     private Response message;
 
+    private ChannelHandlerContext ctx;
+
 
     public ReplyFuture(int messageId) {
         this.messageId = messageId;
     }
+
+    public ReplyFuture(ChannelHandlerContext ctx, int messageId) {
+        this.messageId = messageId;
+        this.ctx = ctx;
+    }
+
 
     public long getReadTimeoutMillis() {
         return readTimeoutMillis;
@@ -58,6 +67,10 @@ public class ReplyFuture {
 
     public synchronized void onReceivedReply(Response message) {
         this.message = message;
+        if (ctx != null) {
+            LOGGER.info("future write msg {}", message);
+            ctx.writeAndFlush(message);
+        }
         this.notifyAll();
     }
 

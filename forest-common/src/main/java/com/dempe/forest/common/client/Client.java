@@ -2,6 +2,7 @@ package com.dempe.forest.common.client;
 
 import com.dempe.forest.common.proto.Request;
 import com.dempe.forest.common.proto.Response;
+import io.netty.channel.ChannelHandlerContext;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,6 +18,8 @@ public interface Client {
     public Response sendAndWait(Request request);
 
     public Response sendAndWait(Request request, long timeOut);
+
+    public void sendAndWrite(ChannelHandlerContext ctx, Request request);
 
 //
 }
