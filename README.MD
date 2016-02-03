@@ -1,5 +1,7 @@
 #Forest
 >forest是一个基于netty和zookeeper实现的分布式服务框架
+
+
 ![Alt text](./doc/forest.png)
 ##模块
 ###forest-common
@@ -33,7 +35,9 @@
 > *  默认 default
 > * 轮叫调度Round Robin
 > * 加权轮叫Weighted Round Robin
->* 哈希调度Hash
+> * 哈希调度Hash
+
+
 ##使用示例
 >1.启动zookeeper
 >2.启动forest-bus服务  main (com.dempe.forest.bus.ForestBusServer)
