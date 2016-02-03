@@ -32,17 +32,17 @@
 >基于zookeeper实现的服务发现
 
 ###负载均衡策略
-*  默认 default
+* 默认 default
 * 轮叫调度Round Robin
 * 加权轮叫Weighted Round Robin
 * 哈希调度Hash
 
 
 ##使用示例
-1.启动zookeeper
-2.启动forest-bus服务  main (com.dempe.forest.bus.ForestBusServer)
-3.启动forest-leaf业务进程 main(com.dempe.forest.leaf.LeafServer)
-4.启动客户端模拟器 main(com.dempe.forest.leaf.simulator.LeafSimulator)
+* 1.启动zookeeper
+* 2.启动forest-bus服务  main (com.dempe.forest.bus.ForestBusServer)
+* 3.启动forest-leaf业务进程 main(com.dempe.forest.leaf.LeafServer)
+* 4.启动客户端模拟器 main(com.dempe.forest.leaf.simulator.LeafSimulator)
 
 ##TODO
 >目前仅实现核心功能，更多细节待完善
