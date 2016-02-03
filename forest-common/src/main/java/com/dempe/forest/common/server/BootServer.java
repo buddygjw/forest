@@ -40,20 +40,30 @@ public class BootServer implements Server {
     private AppConfig config;
     private ServerContext Servercontext;
     private ForestNameService forestNameService;
+    private ChannelInitializer channelInitializer;
 
 
     public BootServer(AppConfig config, ApplicationContext context) {
         this.config = config;
         this.context = context;
         Servercontext = new ServerContext(config, context);
+        init();
+    }
 
+    public BootServer(AppConfig config, ApplicationContext context, ChannelInitializer channelInitializer) {
+        this.config = config;
+        this.context = context;
+        Servercontext = new ServerContext(config, context);
+        this.channelInitializer = channelInitializer;
         init();
     }
 
 
     public void init() {
         executorGroup = new DefaultEventExecutorGroup(4, new DefaultThreadFactory("decode-worker-thread-pool"));
-        ChannelInitializer channelInitializer = new ServerHandlerInitializer(Servercontext);
+        if (channelInitializer == null) {
+            channelInitializer = new ServerHandlerInitializer(Servercontext);
+        }
         init(channelInitializer);
 
     }

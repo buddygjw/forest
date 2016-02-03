@@ -152,8 +152,6 @@ public class ForestClient implements Client {
 
     @Override
     public void sendOnly(Request request) {
-        int id = idMaker.incrementAndGet();
-        request.setSeqId(id);
         send(request);
     }
 

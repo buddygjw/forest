@@ -18,7 +18,7 @@ import com.dempe.forest.common.proto.Response;
 public class LeafSimulator {
 
     public static void main(String[] args) throws Exception {
-        HAClientService clientService = new HAClientService(Constants.FOREST_LEAF_NAME);
+        HAClientService clientService = new HAClientService(Constants.FOREST_BUS_NAME);
         Request request = buildReq();
         Response response = clientService.sendAndWait(request);
         System.out.println(response);
