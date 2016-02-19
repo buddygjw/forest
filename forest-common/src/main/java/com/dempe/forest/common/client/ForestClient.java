@@ -133,7 +133,7 @@ public class ForestClient implements Client {
     }
 
 
-    public boolean reconnect() throws IOException, InterruptedException, ExecutionException, TimeoutException {
+    public boolean reconnect() throws Exception {
         close();
         LOGGER.info("start reconnect to server.");
         f = b.connect(host, port);// 异步建立长连接
@@ -146,7 +146,10 @@ public class ForestClient implements Client {
         return f != null && f.channel().isActive();
     }
 
-    public void send(Request request) {
+    public void send(Request request) throws Exception {
+        if(!isConnected()){
+            reconnect();
+        }
         f.channel().writeAndFlush(request);
     }
 
@@ -155,7 +158,7 @@ public class ForestClient implements Client {
      * @param request 请求消息
      */
     @Override
-    public void sendOnly(Request request) {
+    public void sendOnly(Request request) throws Exception {
         send(request);
     }
 
@@ -165,7 +168,7 @@ public class ForestClient implements Client {
      * @return
      */
     @Override
-    public Response sendAndWait(Request request) {
+    public Response sendAndWait(Request request) throws Exception {
         int id = request.getSeqId();
         if (id == 0) {
             id = idMaker.incrementAndGet();
@@ -186,7 +189,7 @@ public class ForestClient implements Client {
      * @return
      */
     @Override
-    public Response sendAndWait(Request request, long timeOut) {
+    public Response sendAndWait(Request request, long timeOut) throws Exception {
         int id = request.getSeqId();
         if (id == 0) {
             id = idMaker.incrementAndGet();
@@ -206,7 +209,7 @@ public class ForestClient implements Client {
      * @param ctx 上下文，用于将response写入对应的channel中
      * @param request 请求消息
      */
-    public void sendForward(ChannelHandlerContext ctx, Request request) {
+    public void sendForward(ChannelHandlerContext ctx, Request request) throws Exception {
         int id = request.getSeqId();
         if (id == 0) {
             id = idMaker.incrementAndGet();

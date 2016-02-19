@@ -30,7 +30,7 @@ public class HAClientService {
         }
     }
 
-    public void sendOnly(Request request) {
+    public void sendOnly(Request request) throws Exception {
         Client client = haForestClient.getClient();
         if (client == null) {
             LOGGER.warn("no available node for request:{}", request);
@@ -40,7 +40,7 @@ public class HAClientService {
 
     }
 
-    public Response sendAndWait(Request request) {
+    public Response sendAndWait(Request request) throws Exception {
         Client client = haForestClient.getClient();
         if (client == null) {
             LOGGER.warn("no available node for request:{}", request);
@@ -49,7 +49,7 @@ public class HAClientService {
         return client.sendAndWait(request);
     }
 
-    public Response sendAndWait(Request request, long timeOut) {
+    public Response sendAndWait(Request request, long timeOut) throws Exception {
         Client client = haForestClient.getClient();
         if (client == null) {
             LOGGER.warn("no available node for request:{}", request);
@@ -58,7 +58,7 @@ public class HAClientService {
         return client.sendAndWait(request, timeOut);
     }
 
-    public void sendAndWrite(ChannelHandlerContext ctx, Request request) {
+    public void sendAndWrite(ChannelHandlerContext ctx, Request request) throws Exception {
         Client client = haForestClient.getClient();
         if (client == null) {
             LOGGER.warn("no available node for request:{}", request);

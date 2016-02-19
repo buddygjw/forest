@@ -4,6 +4,10 @@ import com.dempe.forest.common.protocol.Request;
 import com.dempe.forest.common.protocol.Response;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Dempe
@@ -13,13 +17,13 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public interface Client {
 
-    public void sendOnly(Request request);
+    public void sendOnly(Request request) throws Exception;
 
-    public Response sendAndWait(Request request);
+    public Response sendAndWait(Request request) throws Exception;
 
-    public Response sendAndWait(Request request, long timeOut);
+    public Response sendAndWait(Request request, long timeOut) throws Exception;
 
-    public void sendForward(ChannelHandlerContext ctx, Request request);
+    public void sendForward(ChannelHandlerContext ctx, Request request) throws Exception;
 
 //
 }
