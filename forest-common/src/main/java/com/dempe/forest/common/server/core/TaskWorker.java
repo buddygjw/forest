@@ -3,9 +3,7 @@ package com.dempe.forest.common.server.core;
 import com.dempe.forest.common.proto.Request;
 import com.dempe.forest.common.proto.Response;
 import com.dempe.forest.common.server.ServerContext;
-
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,8 +44,6 @@ public class TaskWorker implements Runnable {
 //                LOGGER.info("act:{}", act.toString());
                 ctx.writeAndFlush(act);
 //                metricThread.increment();
-            } else {
-                ReferenceCountUtil.release(act);
             }
         } catch (InvocationTargetException e) {
             LOGGER.error(e.getMessage(), e);

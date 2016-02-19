@@ -1,12 +1,13 @@
 package com.dempe.forest.common.proto.codec;
 
 
-
+import com.dempe.forest.common.uitls.pack.Marshallable;
+import com.dempe.forest.common.uitls.pack.ProtocolValue;
+import com.dempe.forest.common.uitls.pack.Unpack;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
-import com.dempe.forest.common.uitls.pack.*;
 import java.io.IOException;
 import java.nio.ByteOrder;
 import java.util.List;
@@ -40,15 +41,21 @@ public abstract class AbstractDecoder extends ByteToMessageDecoder {
             return;
         }
 
-        byte[] bytes = new byte[dataSize];
-        buf.readBytes(bytes, 0, bytes.length);
-        Unpack unpack = new Unpack(bytes);
-        byte protoType = (byte) protoValue[0];
+        try {
+            byte[] bytes = new byte[dataSize];
+            buf.readBytes(bytes, 0, bytes.length);
+            Unpack unpack = new Unpack(bytes);
+            byte protoType = (byte) protoValue[0];
 
-        if (protoType == 0) {
-            Marshallable proto = decode(unpack);
-            list.add(proto);
+            if (protoType == 0) {
+                Marshallable proto = decode(unpack);
+                list.add(proto);
+            }
+        } finally {
+            // 释放ByteBuf
+            buf.release();
         }
+
 
     }
 
