@@ -41,19 +41,14 @@ public abstract class AbstractDecoder extends ByteToMessageDecoder {
             return;
         }
 
-        try {
-            byte[] bytes = new byte[dataSize];
-            buf.readBytes(bytes, 0, bytes.length);
-            Unpack unpack = new Unpack(bytes);
-            byte protoType = (byte) protoValue[0];
+        byte[] bytes = new byte[dataSize];
+        buf.readBytes(bytes, 0, bytes.length);
+        Unpack unpack = new Unpack(bytes);
+        byte protoType = (byte) protoValue[0];
 
-            if (protoType == 0) {
-                Marshallable proto = decode(unpack);
-                list.add(proto);
-            }
-        } finally {
-            // 释放ByteBuf
-            buf.release();
+        if (protoType == 0) {
+            Marshallable proto = decode(unpack);
+            list.add(proto);
         }
 
 
