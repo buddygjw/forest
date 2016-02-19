@@ -1,8 +1,8 @@
 package com.dempe.forest.common.client.ha;
 
 import com.dempe.forest.common.client.Client;
-import com.dempe.forest.common.proto.Request;
-import com.dempe.forest.common.proto.Response;
+import com.dempe.forest.common.protocol.Request;
+import com.dempe.forest.common.protocol.Response;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

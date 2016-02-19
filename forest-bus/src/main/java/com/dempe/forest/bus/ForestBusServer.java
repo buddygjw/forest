@@ -2,8 +2,8 @@ package com.dempe.forest.bus;
 
 import com.dempe.forest.bus.handler.BusDispatcherHandler;
 import com.dempe.forest.common.AppConfig;
-import com.dempe.forest.common.proto.codec.DefaultEncoder;
-import com.dempe.forest.common.proto.codec.RequestDecoder;
+import com.dempe.forest.common.protocol.codec.DefaultEncoder;
+import com.dempe.forest.common.protocol.codec.RequestDecoder;
 import com.dempe.forest.common.server.BootServer;
 import com.dempe.forest.common.uitls.DefConfigFactory;
 import io.netty.channel.ChannelInitializer;

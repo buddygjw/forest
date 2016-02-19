@@ -1,11 +1,8 @@
 package com.dempe.forest.common.server;
 
 
-import com.dempe.forest.common.proto.codec.AbstractDecoder;
-import com.dempe.forest.common.proto.codec.AbstractEncoder;
 import com.dempe.forest.common.AppConfig;
-import com.dempe.forest.common.proto.Request;
-import com.dempe.forest.common.proto.Response;
+import com.dempe.forest.common.protocol.Request;
 import com.dempe.forest.common.server.core.ActionMethod;
 import com.dempe.forest.common.server.core.RequestMapping;
 

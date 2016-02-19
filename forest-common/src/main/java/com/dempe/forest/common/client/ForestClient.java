@@ -1,10 +1,10 @@
 package com.dempe.forest.common.client;
 
 import com.dempe.forest.common.NodeDetails;
-import com.dempe.forest.common.proto.Request;
-import com.dempe.forest.common.proto.Response;
-import com.dempe.forest.common.proto.codec.DefaultEncoder;
-import com.dempe.forest.common.proto.codec.ResponseDecoder;
+import com.dempe.forest.common.protocol.Request;
+import com.dempe.forest.common.protocol.Response;
+import com.dempe.forest.common.protocol.codec.DefaultEncoder;
+import com.dempe.forest.common.protocol.codec.ResponseDecoder;
 import com.dempe.forest.common.client.core.ClientHandler;
 import com.dempe.forest.common.client.core.ReplyFuture;
 import com.dempe.forest.common.client.core.ReplyWaitQueue;

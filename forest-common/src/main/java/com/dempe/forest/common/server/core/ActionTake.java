@@ -2,8 +2,8 @@ package com.dempe.forest.common.server.core;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.dempe.forest.common.proto.Request;
-import com.dempe.forest.common.proto.Response;
+import com.dempe.forest.common.protocol.Request;
+import com.dempe.forest.common.protocol.Response;
 import com.dempe.forest.common.server.ServerContext;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

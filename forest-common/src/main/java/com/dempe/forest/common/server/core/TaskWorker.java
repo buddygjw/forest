@@ -1,7 +1,7 @@
 package com.dempe.forest.common.server.core;
 
-import com.dempe.forest.common.proto.Request;
-import com.dempe.forest.common.proto.Response;
+import com.dempe.forest.common.protocol.Request;
+import com.dempe.forest.common.protocol.Response;
 import com.dempe.forest.common.server.ServerContext;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;

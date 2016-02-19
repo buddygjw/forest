@@ -1,6 +1,6 @@
 package com.dempe.forest.common.server.core;
 
-import com.dempe.forest.common.proto.Request;
+import com.dempe.forest.common.protocol.Request;
 import com.dempe.forest.common.server.ServerContext;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
@@ -24,7 +24,7 @@ public class ProcessorHandler extends ChannelHandlerAdapter {
 
     // 业务逻辑线程池(业务逻辑最好跟netty io线程分开处理，线程切换虽会带来一定的性能损耗，但可以防止业务逻辑阻塞io线程)
     private final static ExecutorService workerThreadService = Executors.newFixedThreadPool(
-            Runtime.getRuntime().availableProcessors(), new DefaultThreadFactory("workerThread"));
+            Runtime.getRuntime().availableProcessors() * 2, new DefaultThreadFactory("workerThread"));
 
     private ServerContext context;
 

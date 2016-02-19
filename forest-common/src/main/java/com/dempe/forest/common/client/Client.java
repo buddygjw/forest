@@ -1,7 +1,7 @@
 package com.dempe.forest.common.client;
 
-import com.dempe.forest.common.proto.Request;
-import com.dempe.forest.common.proto.Response;
+import com.dempe.forest.common.protocol.Request;
+import com.dempe.forest.common.protocol.Response;
 import io.netty.channel.ChannelHandlerContext;
 
 /**

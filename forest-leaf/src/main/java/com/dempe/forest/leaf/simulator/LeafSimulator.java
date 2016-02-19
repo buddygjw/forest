@@ -3,8 +3,8 @@ package com.dempe.forest.leaf.simulator;
 import com.alibaba.fastjson.JSONObject;
 import com.dempe.forest.common.Constants;
 import com.dempe.forest.common.client.ha.HAClientService;
-import com.dempe.forest.common.proto.Request;
-import com.dempe.forest.common.proto.Response;
+import com.dempe.forest.common.protocol.Request;
+import com.dempe.forest.common.protocol.Response;
 
 import java.util.concurrent.TimeUnit;
 

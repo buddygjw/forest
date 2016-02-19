@@ -1,7 +1,7 @@
 package com.dempe.forest.leaf.simulator;
 
 import com.dempe.forest.common.NodeDetails;
-import com.dempe.forest.common.name.ForestNameService;
+import com.dempe.forest.common.register.ForestNameService;
 import org.apache.curator.x.discovery.ServiceInstance;
 
 import java.util.Collection;

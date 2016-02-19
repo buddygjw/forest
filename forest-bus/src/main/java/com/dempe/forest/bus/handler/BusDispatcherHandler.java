@@ -1,7 +1,7 @@
 package com.dempe.forest.bus.handler;
 
 import com.dempe.forest.common.client.ha.HAClientService;
-import com.dempe.forest.common.proto.Request;
+import com.dempe.forest.common.protocol.Request;
 import com.google.common.collect.Maps;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;

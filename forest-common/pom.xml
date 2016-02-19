@@ -87,6 +87,12 @@
             <version>${netty.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>${netty.groupId}</groupId>
+            <artifactId>netty-example</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.apache.commons</groupId>

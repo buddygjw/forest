@@ -1,8 +1,8 @@
 package com.dempe.forest.common.server.core;
 
 
-import com.dempe.forest.common.proto.codec.DefaultEncoder;
-import com.dempe.forest.common.proto.codec.RequestDecoder;
+import com.dempe.forest.common.protocol.codec.DefaultEncoder;
+import com.dempe.forest.common.protocol.codec.RequestDecoder;
 import com.dempe.forest.common.server.ServerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

@@ -2,7 +2,7 @@ package com.dempe.forest.common.server;
 
 
 import com.dempe.forest.common.AppConfig;
-import com.dempe.forest.common.name.ForestNameService;
+import com.dempe.forest.common.register.ForestNameService;
 import com.dempe.forest.common.server.core.ServerHandlerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -61,7 +61,7 @@ public class BootServer implements Server {
 
 
     public void init() {
-        executorGroup = new DefaultEventExecutorGroup(4, new DefaultThreadFactory("decode-worker-thread-pool"));
+        executorGroup = new DefaultEventExecutorGroup(Runtime.getRuntime().availableProcessors(), new DefaultThreadFactory("decode-worker-thread-pool"));
         if (channelInitializer == null) {
             channelInitializer = new ServerHandlerInitializer(Servercontext);
         }
