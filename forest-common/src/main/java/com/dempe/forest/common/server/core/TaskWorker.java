@@ -24,8 +24,6 @@ public class TaskWorker implements Runnable {
     private ServerContext context;
     private Request request;
 
-//    private static MetricThread metricThread = new MetricThread("write");
-
     public TaskWorker(ChannelHandlerContext ctx, ServerContext context, Request request) {
         this.ctx = ctx;
         this.context = context;
@@ -40,10 +38,7 @@ public class TaskWorker implements Runnable {
             ActionTake tack = new ActionTake(context);
             Response act = tack.act(request);
             if (act != null) {
-                // 写入的时候已经release msg 无需显示的释放
-//                LOGGER.info("act:{}", act.toString());
                 ctx.writeAndFlush(act);
-//                metricThread.increment();
             }
         } catch (InvocationTargetException e) {
             LOGGER.error(e.getMessage(), e);

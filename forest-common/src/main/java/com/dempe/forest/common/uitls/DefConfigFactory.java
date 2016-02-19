@@ -16,6 +16,7 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 public class DefConfigFactory {
+
     public static AppConfig createUATConfig() {
         return createConfig(EnvEnum.UAT.getEnv());
     }

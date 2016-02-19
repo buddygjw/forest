@@ -1,4 +1,4 @@
-package com.dempe.forest.common.server.core;
+package com.dempe.forest.common.client.core;
 
 import com.dempe.forest.common.proto.Response;
 import io.netty.channel.ChannelHandlerContext;

@@ -1,10 +1,10 @@
 package com.dempe.forest.common.server.core;
 
 
-
 import com.dempe.forest.common.AppConfig;
 import com.dempe.forest.common.Path;
 import com.dempe.forest.common.uitls.PackageUtils;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -43,13 +42,12 @@ public class RequestMapping {
     }
 
     /**
-     * 扫描packet下面所有的映射，初始化mapping
+     * 扫描packet下所有的Controller映射，初始化mapping
+     * 默认规则为类名/方法名
      */
-
     public void initMapping() {
         LOGGER.info("handles begin initiating");
-        List<String> packages = new ArrayList<String>();
-
+        List<String> packages = Lists.newArrayList();
         packages.add(config.getPackageName());
         LOGGER.info("scanned packages :{} ", packages);
         for (String scanPackage : packages) {
@@ -75,7 +73,12 @@ public class RequestMapping {
                                 if (StringUtils.isBlank(pathVal)) {
                                     pathVal = method.getName();
                                 }
-                                String uri = "/" + actionVal + "/" + pathVal;
+                                String uri;
+                                if (actionVal.startsWith("/")) {
+                                    uri = actionVal + "/" + pathVal;
+                                } else {
+                                    uri = "/" + actionVal + "/" + pathVal;
+                                }
                                 if (mapping.containsKey(uri)) {
                                     LOGGER.warn("Method:{} declares duplicated jsonURI:{}, previous one will be overwritten", method, uri);
                                 }

@@ -1,10 +1,9 @@
-package com.dempe.forest.common.server.core;
+package com.dempe.forest.common.client.core;
 
 
 import com.dempe.forest.common.proto.Response;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,11 +33,9 @@ public class ClientHandler extends ChannelHandlerAdapter {
             }
             // 唤醒对应的future
             future.onReceivedReply(resp);
-
             LOGGER.debug("result = {}", resp.toString());
         } finally {
             replyQueue.remove(id);
-            ReferenceCountUtil.release(msg);
         }
     }
 

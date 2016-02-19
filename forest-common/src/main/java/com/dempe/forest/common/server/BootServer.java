@@ -32,6 +32,7 @@ import java.io.IOException;
 public class BootServer implements Server {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BootServer.class);
+
     ApplicationContext context;
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;

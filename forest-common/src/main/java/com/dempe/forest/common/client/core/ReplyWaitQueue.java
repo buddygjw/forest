@@ -1,4 +1,4 @@
-package com.dempe.forest.common.server.core;
+package com.dempe.forest.common.client.core;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

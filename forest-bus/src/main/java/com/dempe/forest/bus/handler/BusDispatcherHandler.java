@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
+ * netty handler是串行，故无需考虑并发问题
  * User: Dempe
  * Date: 2016/1/29
  * Time: 17:42

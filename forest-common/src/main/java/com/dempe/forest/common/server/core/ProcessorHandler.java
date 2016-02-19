@@ -26,7 +26,6 @@ public class ProcessorHandler extends ChannelHandlerAdapter {
     private final static ExecutorService workerThreadService = Executors.newFixedThreadPool(
             Runtime.getRuntime().availableProcessors(), new DefaultThreadFactory("workerThread"));
 
-    //    private static MetricThread metricThread =new MetricThread("lamp");
     private ServerContext context;
 
     public ProcessorHandler(ServerContext context) {
@@ -35,14 +34,9 @@ public class ProcessorHandler extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        //  ent protocol
-//        LOGGER.info("dispatch msg:{}", msg);
-//        metricThread.increment();
         if (msg instanceof Request) {
             workerThreadService.submit(new TaskWorker(ctx, context, (Request) msg));
         }
-
-
     }
 
 

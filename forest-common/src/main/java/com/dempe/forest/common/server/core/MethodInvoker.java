@@ -1,6 +1,8 @@
 package com.dempe.forest.common.server.core;
 
 
+import com.dempe.forest.common.server.core.ActionMethod;
+
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -15,13 +17,9 @@ public class MethodInvoker {
 
     public static Object interceptorInvoker(ActionMethod actionMethod, Object[] parameterValues)
             throws InvocationTargetException, IllegalAccessException {
-
         // 速率限定
-
         // 拦截器前
-
         Object result = actionMethod.call(parameterValues);
-
         return result;
     }
 }
