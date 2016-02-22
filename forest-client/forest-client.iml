@@ -11,8 +11,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="forest-core" />
-    <orderEntry type="module" module-name="forest-client" />
     <orderEntry type="module" module-name="forest-register" />
     <orderEntry type="module" module-name="forest-common" />
     <orderEntry type="library" name="Maven: org.aeonbits.owner:owner:1.0.8" level="project" />
