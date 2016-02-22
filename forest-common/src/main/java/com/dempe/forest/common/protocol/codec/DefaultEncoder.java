@@ -1,7 +1,7 @@
 package com.dempe.forest.common.protocol.codec;
 
-import com.dempe.forest.common.uitls.pack.Marshallable;
-import com.dempe.forest.common.uitls.pack.Pack;
+import com.dempe.forest.common.pack.Marshallable;
+import com.dempe.forest.common.pack.Pack;
 
 /**
  * Created with IntelliJ IDEA.

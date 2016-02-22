@@ -1,8 +1,8 @@
 package com.dempe.forest.common.protocol.codec;
 
 import com.dempe.forest.common.protocol.Request;
-import com.dempe.forest.common.uitls.pack.Marshallable;
-import com.dempe.forest.common.uitls.pack.Unpack;
+import com.dempe.forest.common.pack.Marshallable;
+import com.dempe.forest.common.pack.Unpack;
 
 import java.io.IOException;
 

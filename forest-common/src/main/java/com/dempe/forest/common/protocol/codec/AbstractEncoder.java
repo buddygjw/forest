@@ -1,9 +1,9 @@
 package com.dempe.forest.common.protocol.codec;
 
 
-import com.dempe.forest.common.uitls.pack.Marshallable;
-import com.dempe.forest.common.uitls.pack.Pack;
-import com.dempe.forest.common.uitls.pack.ProtocolValue;
+import com.dempe.forest.common.pack.Marshallable;
+import com.dempe.forest.common.pack.Pack;
+import com.dempe.forest.common.pack.ProtocolValue;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.EncoderException;

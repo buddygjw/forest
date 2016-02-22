@@ -1,9 +1,9 @@
 package com.dempe.forest.leaf;
 
 
-import com.dempe.forest.common.server.BootServer;
-import com.dempe.forest.common.server.Server;
 import com.dempe.forest.common.uitls.DefConfigFactory;
+import com.dempe.forest.core.BootServer;
+import com.dempe.forest.core.Server;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

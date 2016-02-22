@@ -9,15 +9,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>forest-service</artifactId>
+    <artifactId>forest-client</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.dempe.forest</groupId>
-            <artifactId>forest-core</artifactId>
+            <artifactId>forest-register</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
     </dependencies>
 
 
