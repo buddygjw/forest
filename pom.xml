@@ -15,6 +15,7 @@
         <module>forest-leaf</module>
         <module>forest-client</module>
         <module>forest-core</module>
+        <module>forest-mqtt</module>
     </modules>
 
 

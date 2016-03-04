@@ -35,9 +35,15 @@ public class TaskWorker implements Runnable {
             // set执行上下文环境
             context.setLocalContext(request, ctx);
             ActionTake tack = new ActionTake(context);
-            Response act = tack.act(request);
+            final Response act = tack.act(request);
             if (act != null) {
-                ctx.writeAndFlush(act);
+                // 交给netty io 线程处理
+                ctx.executor().submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        ctx.writeAndFlush(act);
+                    }
+                });
             }
         } catch (InvocationTargetException e) {
             LOGGER.error(e.getMessage(), e);

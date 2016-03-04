@@ -47,7 +47,7 @@ public class BootServer implements com.dempe.forest.core.Server {
     public BootServer(AppConfig config, ApplicationContext context) {
         this.config = config;
         this.context = context;
-        Servercontext = new com.dempe.forest.core.ServerContext(config, context);
+        Servercontext = new  ServerContext(config, context);
         init();
     }
 
