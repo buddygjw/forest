@@ -1,6 +1,6 @@
 package com.dempe.forest.bus.handler;
 
-import com.dempe.forest.client.ha.FutureClientService;
+import com.dempe.forest.client.ha.ForestClientService;
 import com.dempe.forest.common.protocol.Request;
 import com.google.common.collect.Maps;
 import io.netty.channel.ChannelHandlerAdapter;
@@ -21,7 +21,7 @@ public class BusDispatcherHandler extends ChannelHandlerAdapter {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(BusDispatcherHandler.class);
 
-    private final static Map<String, FutureClientService> nameClientMap = Maps.newConcurrentMap();
+    private final static Map<String, ForestClientService> nameClientMap = Maps.newConcurrentMap();
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -29,7 +29,7 @@ public class BusDispatcherHandler extends ChannelHandlerAdapter {
         if (msg instanceof Request) {
             Request request = (Request) msg;
             LOGGER.info("dispatcher request = {}", request);
-            FutureClientService clientService = getClientServiceByName(request.getName());
+            ForestClientService clientService = getClientServiceByName(request.getName());
             clientService.sendAndWrite(ctx, request);
         }
 
@@ -44,10 +44,10 @@ public class BusDispatcherHandler extends ChannelHandlerAdapter {
      * @return
      * @throws Exception
      */
-    private FutureClientService getClientServiceByName(String name) throws Exception {
-        FutureClientService clientService = nameClientMap.get(name);
+    private ForestClientService getClientServiceByName(String name) throws Exception {
+        ForestClientService clientService = nameClientMap.get(name);
         if (clientService == null) {
-            clientService = new FutureClientService(name);
+            clientService = new ForestClientService(name);
             nameClientMap.put(name, clientService);
         }
         return clientService;

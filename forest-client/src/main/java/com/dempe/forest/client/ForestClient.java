@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Time: 11:02
  * To change this template use File | Settings | File Templates.
  */
-public  abstract class ForestClient implements Client {
+public class ForestClient implements Client {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ForestClient.class);
 
@@ -142,10 +142,64 @@ public  abstract class ForestClient implements Client {
     }
 
     public void send(Request request) throws Exception {
-        if(!isConnected()){
+        if (!isConnected()) {
             reconnect();
         }
         f.channel().writeAndFlush(request);
+    }
+
+    /**
+     * 发送消息，等消息返回
+     *
+     * @param request 请求消息
+     * @return
+     */
+    public ReplyFuture sendRequest(Request request) throws Exception {
+        int id = request.getSeqId();
+        if (id == 0) {
+            id = idMaker.incrementAndGet();
+            request.setSeqId(id);
+        }
+        ReplyFuture future = new ReplyFuture(id);
+        replyQueue.add(future);
+        send(request);
+        return future;
+    }
+
+
+    /**
+     * 发送消息，并将返回消息写到ctx中
+     *
+     * @param ctx     上下文，用于将response写入对应的channel中
+     * @param request 请求消息
+     */
+    public void sendForward(ChannelHandlerContext ctx, Request request) throws Exception {
+        int id = request.getSeqId();
+        if (id == 0) {
+            id = idMaker.incrementAndGet();
+            request.setSeqId(id);
+        }
+        ReplyFuture future = new ReplyFuture(ctx, id);
+        replyQueue.add(future);
+        send(request);
+    }
+
+
+    /**
+     * 发送消息，等消息返回
+     *
+     * @param request 请求消息
+     * @return
+     */
+    public Response sendAndWaitRequest(Request request) throws Exception {
+        ReplyFuture future = sendRequest(request);
+        return future.getReply();
+    }
+
+    public Response sendAndWaitRequest(Request request, long timeOut) throws Exception {
+        ReplyFuture future = sendRequest(request);
+        future.setReadTimeoutMillis(timeOut);
+        return future.getReply();
     }
 
 

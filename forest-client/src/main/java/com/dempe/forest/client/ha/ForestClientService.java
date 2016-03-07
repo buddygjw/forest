@@ -1,9 +1,10 @@
 package com.dempe.forest.client.ha;
 
 import com.dempe.forest.client.Client;
-import com.dempe.forest.client.FutureClient;
+import com.dempe.forest.client.ForestClient;
 import com.dempe.forest.client.ReplyFuture;
 import com.dempe.forest.common.protocol.Request;
+import com.dempe.forest.common.protocol.Response;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,15 +16,15 @@ import org.slf4j.LoggerFactory;
  * Time: 11:18
  * To change this template use File | Settings | File Templates.
  */
-public class FutureClientService {
+public class ForestClientService {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(FutureClientService.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(ForestClientService.class);
 
     private static HAForestClient haForestClient;
 
-    public FutureClientService(String name) throws Exception {
+    public ForestClientService(String name) throws Exception {
         if (haForestClient == null) {
-            synchronized (FutureClientService.class) {
+            synchronized (ForestClientService.class) {
                 if (haForestClient == null) {
                     haForestClient = new HAForestClient(name);
                 }
@@ -32,13 +33,32 @@ public class FutureClientService {
     }
 
     public ReplyFuture sendAndWait(Request request) throws Exception {
-        FutureClient client = (FutureClient) haForestClient.getClient();
+        ForestClient client = (ForestClient) haForestClient.getClient();
         if (client == null) {
             LOGGER.warn("no available node for request:{}", request);
             return null;
         }
         return client.sendRequest(request);
     }
+
+    public Response sendAndWaitRequest(Request request) throws Exception {
+        ForestClient client = (ForestClient) haForestClient.getClient();
+        if (client == null) {
+            LOGGER.warn("no available node for request:{}", request);
+            return null;
+        }
+        return client.sendAndWaitRequest(request);
+    }
+
+    public Response sendAndWaitRequest(Request request, long timeOut) throws Exception {
+        ForestClient client = (ForestClient) haForestClient.getClient();
+        if (client == null) {
+            LOGGER.warn("no available node for request:{}", request);
+            return null;
+        }
+        return client.sendAndWaitRequest(request, timeOut);
+    }
+
 
     public void sendAndWrite(ChannelHandlerContext ctx, Request request) throws Exception {
         Client client = haForestClient.getClient();
