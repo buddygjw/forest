@@ -65,11 +65,17 @@ public class ReplyFuture {
         }
     }
 
-    public synchronized void onReceivedReply(Response message) {
+    public synchronized void onReceivedReply(final Response message) {
         this.message = message;
         if (ctx != null) {
             LOGGER.info("future write msg {}", message);
-            ctx.writeAndFlush(message);
+            ctx.executor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    ctx.writeAndFlush(message);
+                }
+            });
+
         }
         this.notifyAll();
     }

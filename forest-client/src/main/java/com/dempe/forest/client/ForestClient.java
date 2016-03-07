@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Time: 11:02
  * To change this template use File | Settings | File Templates.
  */
-public class ForestClient implements Client {
+public  abstract class ForestClient implements Client {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ForestClient.class);
 
@@ -47,10 +47,10 @@ public class ForestClient implements Client {
     private long connectTimeout = 5000L;
 
     // 消息id生成器，消息id用户标识消息，标识sendAndWait方法的返回
-    private static AtomicInteger idMaker = new AtomicInteger(0);
+    protected static AtomicInteger idMaker = new AtomicInteger(0);
 
     // 消息返回会被装入到队列里
-    private ReplyWaitQueue replyQueue = new ReplyWaitQueue();
+    protected ReplyWaitQueue replyQueue = new ReplyWaitQueue();
 
 
     public ForestClient(NodeDetails nodeDetails) {
@@ -148,70 +148,5 @@ public class ForestClient implements Client {
         f.channel().writeAndFlush(request);
     }
 
-    /**
-     * 仅仅发现消息，不关心返回
-     * @param request 请求消息
-     */
-    @Override
-    public void sendOnly(Request request) throws Exception {
-        send(request);
-    }
 
-    /**
-     * 发送消息，等消息返回
-     * @param request 请求消息
-     * @return
-     */
-    @Override
-    public Response sendAndWait(Request request) throws Exception {
-        int id = request.getSeqId();
-        if (id == 0) {
-            id = idMaker.incrementAndGet();
-            request.setSeqId(id);
-        }
-        ReplyFuture future = new ReplyFuture(id);
-        replyQueue.add(future);
-        send(request);
-        return future.getReply();
-
-
-    }
-
-    /**
-     * 发送消息并等待返回
-     * @param request 请求消息
-     * @param timeOut 请求超时时间
-     * @return
-     */
-    @Override
-    public Response sendAndWait(Request request, long timeOut) throws Exception {
-        int id = request.getSeqId();
-        if (id == 0) {
-            id = idMaker.incrementAndGet();
-            request.setSeqId(id);
-        }
-        ReplyFuture future = new ReplyFuture(id);
-        replyQueue.add(future);
-        future.setReadTimeoutMillis(timeOut);
-        send(request);
-        return future.getReply();
-
-    }
-
-    /**
-     * 发送消息，并将返回消息写到ctx中
-     *
-     * @param ctx 上下文，用于将response写入对应的channel中
-     * @param request 请求消息
-     */
-    public void sendForward(ChannelHandlerContext ctx, Request request) throws Exception {
-        int id = request.getSeqId();
-        if (id == 0) {
-            id = idMaker.incrementAndGet();
-            request.setSeqId(id);
-        }
-        ReplyFuture future = new ReplyFuture(ctx, id);
-        replyQueue.add(future);
-        send(request);
-    }
 }

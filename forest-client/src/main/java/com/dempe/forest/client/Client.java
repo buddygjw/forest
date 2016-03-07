@@ -13,12 +13,12 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public interface Client {
 
-    public void sendOnly(Request request) throws Exception;
-
-    public Response sendAndWait(Request request) throws Exception;
-
-    public Response sendAndWait(Request request, long timeOut) throws Exception;
-
+//    public void sendOnly(Request request) throws Exception;
+//
+//    public Response sendAndWait(Request request) throws Exception;
+//
+//    public Response sendAndWait(Request request, long timeOut) throws Exception;
+//
     public void sendForward(ChannelHandlerContext ctx, Request request) throws Exception;
 
 //

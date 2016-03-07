@@ -1,7 +1,8 @@
 package com.dempe.forest.client.ha;
 
 import com.dempe.forest.client.Client;
-import com.dempe.forest.client.ForestClient;
+import com.dempe.forest.client.ClientFactory;
+import com.dempe.forest.client.FutureClientFactory;
 import com.dempe.forest.common.NodeDetails;
 import com.dempe.forest.common.cluster.HAProxy;
 import com.dempe.forest.common.cluster.ProxyHandler;
@@ -31,20 +32,28 @@ public class HAForestClient extends HAProxy<Client> {
 
     private ForestNameService forestNameService;
 
+    private ClientFactory clientFactory;
+
     private String name;
 
     /**
      * @param strategy
      * @param period
      */
-    public HAForestClient(String name, Strategy strategy, long period) throws Exception {
+    public HAForestClient(ClientFactory clientFactory, String name, Strategy strategy, long period) throws Exception {
         super(strategy, name, period);
+        this.clientFactory = clientFactory;
 
     }
 
     public HAForestClient(String name) throws Exception {
-        this(name, Strategy.DEFAULT, 1000L);
+        this(new FutureClientFactory(), name, Strategy.DEFAULT, 1000L);
     }
+
+    public HAForestClient(ClientFactory clientFactory, String name) throws Exception {
+        this(clientFactory, name, Strategy.DEFAULT, 1000L);
+    }
+
 
     @Override
     public List<NodeDetails> initServerInstanceList(String name) throws Exception {
@@ -70,7 +79,7 @@ public class HAForestClient extends HAProxy<Client> {
          *1s accessPolicy=5次发送失败则会自动切换client
          */
         AccessPolicy policy = new AccessPolicy(10, 1 * 1000, 5 * 1000 * 60, true);
-        ForestClient forestClient = new ForestClient(serverInstance);
+        Client forestClient = clientFactory.makeClient(serverInstance);
         Client client = (Client) ProxyHandler.getProxyInstance(forestClient, this, policy);
         return client;
     }
