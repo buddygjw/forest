@@ -3,7 +3,6 @@ package com.dempe.forest.core;
 import com.dempe.forest.common.protocol.Request;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.util.concurrent.DefaultThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,15 +28,9 @@ public class ProcessorHandler extends ChannelHandlerAdapter {
         this.context = context;
     }
 
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg instanceof Request) {
-            workerThreadService.submit(new TaskWorker(ctx, context, (Request) msg));
-        }
-    }
-
     /**
      * 阻塞的ExecutorService
+     *
      * @param size
      * @return
      */
@@ -55,6 +48,12 @@ public class ProcessorHandler extends ChannelHandlerAdapter {
                 });
     }
 
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        if (msg instanceof Request) {
+            workerThreadService.submit(new TaskWorker(ctx, context, (Request) msg));
+        }
+    }
 
 
 }

@@ -1,6 +1,5 @@
 package com.dempe.forest.register;
 
-import com.dempe.forest.common.Constants;
 import org.aeonbits.owner.Config;
 
 /**

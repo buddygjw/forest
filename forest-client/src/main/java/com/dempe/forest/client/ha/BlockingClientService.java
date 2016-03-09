@@ -1,9 +1,8 @@
 package com.dempe.forest.client.ha;
 
+import com.dempe.forest.common.cluster.HAProxy;
 import com.dempe.forest.common.protocol.Request;
 import com.dempe.forest.common.protocol.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +18,11 @@ public class BlockingClientService {
     public BlockingClientService(String name) throws Exception {
         futureClientService = new FutureClientService(name);
     }
+
+    public BlockingClientService(String name, HAProxy.Strategy strategy, long period) throws Exception {
+        futureClientService = new FutureClientService(name, strategy, period);
+    }
+
 
     public Response send(Request request) throws Exception {
         return futureClientService.send(request).await();

@@ -8,6 +8,6 @@ package com.dempe.forest.common;
  * To change this template use File | Settings | File Templates.
  */
 public interface Constants {
-    String FOREST_BUS_NAME ="forest_bus";
-    String FOREST_LEAF_NAME ="forest_leaf";
+    String FOREST_BUS_NAME = "forest_bus";
+    String FOREST_LEAF_NAME = "forest_leaf";
 }

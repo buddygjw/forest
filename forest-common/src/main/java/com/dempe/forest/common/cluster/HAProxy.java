@@ -18,29 +18,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public abstract class HAProxy<T> extends TimerTask {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(HAProxy.class);
-
-
-    private Timer timer;
-
-    /**
-     * 负载均衡策略
-     * 默认 default
-     * 轮叫调度Round Robin
-     * 加权轮叫Weighted Round Robin
-     * 哈希调度Hash
-     */
-    public enum Strategy {
-        DEFAULT,
-        RR,
-        WRR,
-        HASH
-    }
-
-    private Strategy strategy;
-
-    private LoadBalance lb;
-
-
     /**
      * 可用的服务
      */
@@ -49,22 +26,22 @@ public abstract class HAProxy<T> extends TimerTask {
      * 不可用的服务
      */
     protected List<NodeDetails> unAvailServers = new CopyOnWriteArrayList<NodeDetails>();
-
+    private Timer timer;
+    private Strategy strategy;
+    private LoadBalance lb;
     private Set<HAListener> listeners = new HashSet<HAListener>();
-
 
     /**
      * @param strategy
      * @param period
      */
-    public HAProxy(Strategy strategy, String name,long period) throws Exception {
+    public HAProxy(Strategy strategy, String name, long period) throws Exception {
         this.strategy = strategy;
         this.timer = new Timer();
         LOGGER.info("HALBProxy timer check started, period:{}", period);
         this.timer.schedule(this, 1000, period);
         initServerInstance(name);
     }
-
 
     /**
      * 获得位置
@@ -159,7 +136,6 @@ public abstract class HAProxy<T> extends TimerTask {
         return server;
     }
 
-
     /**
      * 初始化负载均衡器
      */
@@ -244,7 +220,6 @@ public abstract class HAProxy<T> extends TimerTask {
         return server;
     }
 
-
     /**
      * 轮询获得可用服务的client
      *
@@ -306,7 +281,6 @@ public abstract class HAProxy<T> extends TimerTask {
         }
         return null;
     }
-
 
     /**
      * 定时检测服务是否可用
@@ -393,6 +367,20 @@ public abstract class HAProxy<T> extends TimerTask {
                 LOGGER.error("notifyHAListener handleEvent error!", e);
             }
         }
+    }
+
+    /**
+     * 负载均衡策略
+     * 默认 default
+     * 轮叫调度Round Robin
+     * 加权轮叫Weighted Round Robin
+     * 哈希调度Hash
+     */
+    public enum Strategy {
+        DEFAULT,
+        RR,
+        WRR,
+        HASH
     }
 
 

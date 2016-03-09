@@ -1,7 +1,6 @@
 package com.dempe.forest.core;
 
 
-
 import java.lang.reflect.InvocationTargetException;
 
 /**

@@ -2,7 +2,6 @@ package com.dempe.forest.leaf;
 
 import com.dempe.forest.common.AppConfig;
 import com.dempe.forest.common.uitls.DefConfigFactory;
-
 import com.dempe.forest.core.BootServer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

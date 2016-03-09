@@ -38,33 +38,17 @@ public class CommonClient {
     protected Channel channel;
 
     protected EventLoopGroup group;
-
-    private DefaultEventExecutorGroup executorGroup;
-
-    private String host;
-
-    private int port;
-
-    private long connectTimeout = 5000L;
     protected Map<Integer, Context> contextMap = new ConcurrentHashMap<Integer, Context>();
-
-    public static class Context {
-        final Request request;
-        private final short id;
-        final Callback cb;
-
-        Context(int id, Request request, Callback cb) {
-            this.id = (short) id;
-            this.cb = cb;
-            this.request = request;
-        }
-    }
-
+    private DefaultEventExecutorGroup executorGroup;
+    private String host;
+    private int port;
+    private long connectTimeout = 5000L;
 
     public CommonClient(NodeDetails nodeDetails) {
         this(nodeDetails.getIp(), nodeDetails.getPort());
 
     }
+
 
     public CommonClient(String host, int port) {
         this.host = host;
@@ -121,7 +105,6 @@ public class CommonClient {
                 });
     }
 
-
     public void connect(final String host, final int port) {
         try {
             f = b.connect(host, port).sync();
@@ -130,7 +113,6 @@ public class CommonClient {
             LOGGER.error(e.getMessage(), e);
         }
     }
-
 
     public void closeSync() throws IOException {
         try {
@@ -147,7 +129,6 @@ public class CommonClient {
             f.channel().close();
         }
     }
-
 
     public boolean reconnect() throws Exception {
         close();
@@ -167,6 +148,18 @@ public class CommonClient {
             reconnect();
         }
         f.channel().writeAndFlush(request);
+    }
+
+    public static class Context {
+        final Request request;
+        final Callback cb;
+        private final short id;
+
+        Context(int id, Request request, Callback cb) {
+            this.id = (short) id;
+            this.cb = cb;
+            this.request = request;
+        }
     }
 
 

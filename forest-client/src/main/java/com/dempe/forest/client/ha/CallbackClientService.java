@@ -2,6 +2,7 @@ package com.dempe.forest.client.ha;
 
 import com.dempe.forest.client.Callback;
 import com.dempe.forest.client.Client;
+import com.dempe.forest.common.cluster.HAProxy;
 import com.dempe.forest.common.protocol.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,14 +21,19 @@ public class CallbackClientService {
     private static HACallbackClient haCallbackClient;
 
     public CallbackClientService(String name) throws Exception {
+        this(name, HAProxy.Strategy.DEFAULT, 1000);
+    }
+
+    public CallbackClientService(String name, HAProxy.Strategy strategy, long period) throws Exception {
         if (haCallbackClient == null) {
             synchronized (CallbackClientService.class) {
                 if (haCallbackClient == null) {
-                    haCallbackClient = new HACallbackClient(name);
+                    haCallbackClient = new HACallbackClient(name, strategy, period);
                 }
             }
         }
     }
+
 
     public Callback send(Request request, Callback callback) throws Exception {
         Client client = haCallbackClient.getClient();

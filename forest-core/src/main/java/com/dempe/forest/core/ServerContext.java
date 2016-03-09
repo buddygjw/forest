@@ -3,7 +3,6 @@ package com.dempe.forest.core;
 
 import com.dempe.forest.common.AppConfig;
 import com.dempe.forest.common.protocol.Request;
-
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.context.ApplicationContext;
 
@@ -46,8 +45,6 @@ public class ServerContext {
         }
         return context;
     }
-
-
 
 
     /**

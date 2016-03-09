@@ -2,7 +2,6 @@ package com.dempe.forest.core;
 
 
 import com.dempe.forest.common.AppConfig;
-
 import com.dempe.forest.register.ForestNameService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -47,7 +46,7 @@ public class BootServer implements com.dempe.forest.core.Server {
     public BootServer(AppConfig config, ApplicationContext context) {
         this.config = config;
         this.context = context;
-        Servercontext = new  ServerContext(config, context);
+        Servercontext = new ServerContext(config, context);
         init();
     }
 

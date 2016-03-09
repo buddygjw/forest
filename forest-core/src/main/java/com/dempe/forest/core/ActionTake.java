@@ -1,7 +1,6 @@
 package com.dempe.forest.core;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.dempe.forest.common.protocol.Request;
 import com.dempe.forest.common.protocol.Response;
 import org.apache.commons.lang3.StringUtils;
@@ -57,7 +56,7 @@ public class ActionTake implements Take<Request, Response> {
         Map<String, String> paramMap = request.getParamMap();
         // 获取方法执行参数值
         Object[] parameterValues = MethodParam.getParameterValues(parameterNames, method, paramMap);
-        Object result =MethodInvoker.interceptorInvoker(actionMethod, parameterValues);
+        Object result = MethodInvoker.interceptorInvoker(actionMethod, parameterValues);
         if (result == null) {
             // 当action method 返回是void的时候，不返回任何消息
             LOGGER.debug("actionMethod:{} return void.", actionMethod);

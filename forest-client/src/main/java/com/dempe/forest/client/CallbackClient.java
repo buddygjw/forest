@@ -14,6 +14,10 @@ public class CallbackClient extends CommonClient implements Client {
 
     private int nextMessageId = 1;
 
+    public CallbackClient(String host, int port) {
+        super(host, port);
+    }
+
     private int getNextMessageId() {
         int rc = nextMessageId;
         nextMessageId++;
@@ -21,11 +25,6 @@ public class CallbackClient extends CommonClient implements Client {
             nextMessageId = 1;
         }
         return rc;
-    }
-
-
-    public CallbackClient(String host, int port) {
-        super(host, port);
     }
 
     public void sendOnly(Request request) throws Exception {

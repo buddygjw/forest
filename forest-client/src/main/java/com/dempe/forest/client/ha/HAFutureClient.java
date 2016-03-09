@@ -1,7 +1,6 @@
 package com.dempe.forest.client.ha;
 
 import com.dempe.forest.client.CallbackClient;
-import com.dempe.forest.client.FutureClient;
 import com.dempe.forest.common.NodeDetails;
 import com.dempe.forest.common.cluster.HAProxy;
 import com.dempe.forest.common.cluster.ProxyHandler;
@@ -25,7 +24,7 @@ import java.util.List;
  * Time: 16:36
  * To change this template use File | Settings | File Templates.
  */
-public class HAFutureClient <Client> extends HAProxy<Client> {
+public class HAFutureClient<Client> extends HAProxy<Client> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(HACallbackClient.class);
 
@@ -71,7 +70,7 @@ public class HAFutureClient <Client> extends HAProxy<Client> {
          *1s accessPolicy=5次发送失败则会自动切换client
          */
         AccessPolicy policy = new AccessPolicy(10, 1 * 1000, 5 * 1000 * 60, true);
-        CallbackClient callbackClient = new CallbackClient(serverInstance.getIp(),serverInstance.getPort());
+        CallbackClient callbackClient = new CallbackClient(serverInstance.getIp(), serverInstance.getPort());
         Client client = (Client) ProxyHandler.getProxyInstance(callbackClient, this, policy);
         return client;
     }

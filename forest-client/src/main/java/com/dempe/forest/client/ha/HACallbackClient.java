@@ -39,7 +39,6 @@ public class HACallbackClient extends HAProxy<Client> {
      */
     public HACallbackClient(String name, Strategy strategy, long period) throws Exception {
         super(strategy, name, period);
-
     }
 
     public HACallbackClient(String name) throws Exception {
@@ -71,7 +70,7 @@ public class HACallbackClient extends HAProxy<Client> {
          *1s accessPolicy=5次发送失败则会自动切换client
          */
         AccessPolicy policy = new AccessPolicy(10, 1 * 1000, 5 * 1000 * 60, true);
-        CallbackClient callbackClient = new CallbackClient(serverInstance.getIp(),serverInstance.getPort());
+        CallbackClient callbackClient = new CallbackClient(serverInstance.getIp(), serverInstance.getPort());
         Client client = (Client) ProxyHandler.getProxyInstance(callbackClient, this, policy);
         return client;
     }

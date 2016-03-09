@@ -10,9 +10,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class IDTester {
     public static void main(String[] args) {
         AtomicInteger idMaker = new AtomicInteger(0);
-        while (true){
+        while (true) {
             int i = idMaker.incrementAndGet();
-            if(i%(10000*10000*10000)==0){
+            if (i % (10000 * 10000 * 10000) == 0) {
                 System.out.println(i);
             }
 
