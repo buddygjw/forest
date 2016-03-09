@@ -16,8 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,9 +27,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Time: 11:02
  * To change this template use File | Settings | File Templates.
  */
-public class ForestClient implements Client {
+public class CommonClient {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ForestClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommonClient.class);
 
     protected Bootstrap b;
 
@@ -45,20 +46,27 @@ public class ForestClient implements Client {
     private int port;
 
     private long connectTimeout = 5000L;
+    protected Map<Integer, Context> contextMap = new ConcurrentHashMap<Integer, Context>();
 
-    // 消息id生成器，消息id用户标识消息，标识sendAndWait方法的返回
-    protected static AtomicInteger idMaker = new AtomicInteger(0);
+    public static class Context {
+        final Request request;
+        private final short id;
+        final Callback cb;
 
-    // 消息返回会被装入到队列里
-    protected ReplyWaitQueue replyQueue = new ReplyWaitQueue();
+        Context(int id, Request request, Callback cb) {
+            this.id = (short) id;
+            this.cb = cb;
+            this.request = request;
+        }
+    }
 
 
-    public ForestClient(NodeDetails nodeDetails) {
+    public CommonClient(NodeDetails nodeDetails) {
         this(nodeDetails.getIp(), nodeDetails.getPort());
 
     }
 
-    public ForestClient(String host, int port) {
+    public CommonClient(String host, int port) {
         this.host = host;
         this.port = port;
         init();
@@ -97,7 +105,20 @@ public class ForestClient implements Client {
         ChannelPipeline pipeline = ch.pipeline();
         pipeline.addLast("RequestEncoder", new DefaultEncoder())
                 .addLast("ResponseDecoder", new ResponseDecoder())
-                .addLast("ClientHandler", new ClientHandler());
+                .addLast("ClientHandler", new ChannelHandlerAdapter() {
+                    @Override
+                    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                        Integer id = 0;
+                        Response resp = (Response) msg;
+                        id = resp.getSeqId();
+                        Context context = contextMap.remove(id);
+                        if (context == null) {
+                            LOGGER.debug("messageID:{}, take Context null", id);
+                            return;
+                        }
+                        context.cb.onReceive(resp);
+                    }
+                });
     }
 
 
@@ -146,60 +167,6 @@ public class ForestClient implements Client {
             reconnect();
         }
         f.channel().writeAndFlush(request);
-    }
-
-    /**
-     * 发送消息，等消息返回
-     *
-     * @param request 请求消息
-     * @return
-     */
-    public ReplyFuture sendRequest(Request request) throws Exception {
-        int id = request.getSeqId();
-        if (id == 0) {
-            id = idMaker.incrementAndGet();
-            request.setSeqId(id);
-        }
-        ReplyFuture future = new ReplyFuture(id);
-        replyQueue.add(future);
-        send(request);
-        return future;
-    }
-
-
-    /**
-     * 发送消息，并将返回消息写到ctx中
-     *
-     * @param ctx     上下文，用于将response写入对应的channel中
-     * @param request 请求消息
-     */
-    public void sendForward(ChannelHandlerContext ctx, Request request) throws Exception {
-        int id = request.getSeqId();
-        if (id == 0) {
-            id = idMaker.incrementAndGet();
-            request.setSeqId(id);
-        }
-        ReplyFuture future = new ReplyFuture(ctx, id);
-        replyQueue.add(future);
-        send(request);
-    }
-
-
-    /**
-     * 发送消息，等消息返回
-     *
-     * @param request 请求消息
-     * @return
-     */
-    public Response sendAndWaitRequest(Request request) throws Exception {
-        ReplyFuture future = sendRequest(request);
-        return future.getReply();
-    }
-
-    public Response sendAndWaitRequest(Request request, long timeOut) throws Exception {
-        ReplyFuture future = sendRequest(request);
-        future.setReadTimeoutMillis(timeOut);
-        return future.getReply();
     }
 
 

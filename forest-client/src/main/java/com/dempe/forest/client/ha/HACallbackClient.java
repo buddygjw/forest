@@ -1,7 +1,7 @@
 package com.dempe.forest.client.ha;
 
+import com.dempe.forest.client.CallbackClient;
 import com.dempe.forest.client.Client;
-import com.dempe.forest.client.ForestClient;
 import com.dempe.forest.common.NodeDetails;
 import com.dempe.forest.common.cluster.HAProxy;
 import com.dempe.forest.common.cluster.ProxyHandler;
@@ -25,9 +25,9 @@ import java.util.List;
  * Time: 11:01
  * To change this template use File | Settings | File Templates.
  */
-public class HAForestClient extends HAProxy<Client> {
+public class HACallbackClient extends HAProxy<Client> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(HAForestClient.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(HACallbackClient.class);
 
     private ForestNameService forestNameService;
 
@@ -37,12 +37,12 @@ public class HAForestClient extends HAProxy<Client> {
      * @param strategy
      * @param period
      */
-    public HAForestClient(String name, Strategy strategy, long period) throws Exception {
+    public HACallbackClient(String name, Strategy strategy, long period) throws Exception {
         super(strategy, name, period);
 
     }
 
-    public HAForestClient(String name) throws Exception {
+    public HACallbackClient(String name) throws Exception {
         this(name, Strategy.DEFAULT, 1000L);
     }
 
@@ -71,8 +71,8 @@ public class HAForestClient extends HAProxy<Client> {
          *1s accessPolicy=5次发送失败则会自动切换client
          */
         AccessPolicy policy = new AccessPolicy(10, 1 * 1000, 5 * 1000 * 60, true);
-        Client forestClient = new ForestClient(serverInstance);
-        Client client = (Client) ProxyHandler.getProxyInstance(forestClient, this, policy);
+        CallbackClient callbackClient = new CallbackClient(serverInstance.getIp(),serverInstance.getPort());
+        Client client = (Client) ProxyHandler.getProxyInstance(callbackClient, this, policy);
         return client;
     }
 

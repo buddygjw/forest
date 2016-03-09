@@ -1,12 +1,12 @@
 package com.dempe.forest.common.protocol;
 
-import com.alibaba.fastjson.JSONObject;
+import com.dempe.forest.common.pack.MarshallUtils;
 import com.dempe.forest.common.pack.Marshallable;
 import com.dempe.forest.common.pack.Pack;
 import com.dempe.forest.common.pack.Unpack;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,7 +23,7 @@ public class Request implements Marshallable {
 
     private String uri;
 
-    private String param;
+    private Map<String, String> paramMap;
 
     public int getSeqId() {
         return seqId;
@@ -49,23 +49,12 @@ public class Request implements Marshallable {
         this.uri = uri;
     }
 
-    public String getParam() {
-        return param;
+    public Map<String, String> getParamMap() {
+        return paramMap;
     }
 
-    public void setParam(String param) {
-        this.param = param;
-    }
-
-    public JSONObject paramJSON() {
-        if (StringUtils.isBlank(param)) {
-            return new JSONObject();
-        }
-        return JSONObject.parseObject(param);
-    }
-
-    public void putParaJSON(JSONObject paramJSON) {
-        this.param = paramJSON.toJSONString();
+    public void setParamMap(Map<String, String> paramMap) {
+        this.paramMap = paramMap;
     }
 
     @Override
@@ -73,7 +62,7 @@ public class Request implements Marshallable {
         pack.putInt(seqId);
         pack.putVarstr(name);
         pack.putVarstr(uri);
-        pack.putVarstr(param);
+        MarshallUtils.packMap(pack, paramMap, String.class, String.class);
         return pack;
     }
 
@@ -82,7 +71,7 @@ public class Request implements Marshallable {
         seqId = unpack.popInt();
         name = unpack.popVarstr();
         uri = unpack.popVarstr();
-        param = unpack.popVarstr();
+        paramMap = MarshallUtils.unpackMap(unpack, String.class, String.class, false);
         return this;
     }
 
@@ -92,7 +81,7 @@ public class Request implements Marshallable {
                 "seqId=" + seqId +
                 ", name='" + name + '\'' +
                 ", uri='" + uri + '\'' +
-                ", param='" + param + '\'' +
+                ", paramMap=" + paramMap +
                 '}';
     }
 }

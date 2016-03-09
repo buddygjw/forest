@@ -1,8 +1,6 @@
 package com.dempe.forest.client;
 
 import com.dempe.forest.common.protocol.Request;
-import com.dempe.forest.common.protocol.Response;
-import io.netty.channel.ChannelHandlerContext;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,14 +11,16 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public interface Client {
 
-    public ReplyFuture sendRequest(Request request) throws Exception;
 
+    public void sendOnly(Request request) throws Exception;
 
-    public Response sendAndWaitRequest(Request request, long timeOut) throws Exception;
-
-    public Response sendAndWaitRequest(Request request) throws Exception;
-
-    public void sendForward(ChannelHandlerContext ctx, Request request) throws Exception;
+    /**
+     * 发送消息
+     *
+     * @param request
+     * @return Response
+     */
+    public Callback send(Request request, Callback callback) throws Exception;
 
 
 }

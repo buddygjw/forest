@@ -1,11 +1,12 @@
 package com.dempe.forest.leaf.simulator;
 
-import com.alibaba.fastjson.JSONObject;
-import com.dempe.forest.client.ha.ForestClientService;
+import com.dempe.forest.client.ha.FutureClientService;
 import com.dempe.forest.common.Constants;
 import com.dempe.forest.common.protocol.Request;
 import com.dempe.forest.common.protocol.Response;
+import com.google.common.collect.Maps;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,11 +19,10 @@ import java.util.concurrent.TimeUnit;
 public class LeafSimulator {
 
     public static void main(String[] args) throws Exception {
-        ForestClientService clientService = new ForestClientService(Constants.FOREST_BUS_NAME);
+        FutureClientService clientService = new FutureClientService(Constants.FOREST_BUS_NAME);
         for (int i = 0; i < 10000; i++) {
-
             Request request = buildReq();
-            Response response = clientService.sendAndWait(request).getReply();
+            Response response = clientService.send(request).await();
             System.out.println(response);
             if (i % 10 == 0) {
                 TimeUnit.SECONDS.sleep(1);
@@ -34,9 +34,9 @@ public class LeafSimulator {
         Request request = new Request();
         request.setName(Constants.FOREST_LEAF_NAME);
         request.setUri("/sample/hello");
-        JSONObject param = new JSONObject();
+        Map<String, String> param = Maps.newHashMap();
         param.put("name", "dempe");
-        request.putParaJSON(param);
+        request.setParamMap(param);
         return request;
     }
 }

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * 业务处理快照类
@@ -53,9 +54,9 @@ public class ActionTake implements Take<Request, Response> {
         Method method = actionMethod.getMethod();
         // 获取方法参数
         String[] parameterNames = com.dempe.forest.core.MethodParam.getParameterNames(method);
-        JSONObject params = request.paramJSON();
+        Map<String, String> paramMap = request.getParamMap();
         // 获取方法执行参数值
-        Object[] parameterValues = MethodParam.getParameterValues(parameterNames, method, params);
+        Object[] parameterValues = MethodParam.getParameterValues(parameterNames, method, paramMap);
         Object result =MethodInvoker.interceptorInvoker(actionMethod, parameterValues);
         if (result == null) {
             // 当action method 返回是void的时候，不返回任何消息

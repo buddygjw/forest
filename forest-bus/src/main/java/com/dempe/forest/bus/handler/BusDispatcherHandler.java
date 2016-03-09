@@ -1,7 +1,9 @@
 package com.dempe.forest.bus.handler;
 
-import com.dempe.forest.client.ha.ForestClientService;
+import com.dempe.forest.client.Callback;
+import com.dempe.forest.client.ha.CallbackClientService;
 import com.dempe.forest.common.protocol.Request;
+import com.dempe.forest.common.protocol.Response;
 import com.google.common.collect.Maps;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
@@ -21,16 +23,29 @@ public class BusDispatcherHandler extends ChannelHandlerAdapter {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(BusDispatcherHandler.class);
 
-    private final static Map<String, ForestClientService> nameClientMap = Maps.newConcurrentMap();
+    private final static Map<String, CallbackClientService> nameClientMap = Maps.newConcurrentMap();
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(final ChannelHandlerContext ctx, Object msg) throws Exception {
 
         if (msg instanceof Request) {
             Request request = (Request) msg;
             LOGGER.info("dispatcher request = {}", request);
-            ForestClientService clientService = getClientServiceByName(request.getName());
-            clientService.sendAndWrite(ctx, request);
+            CallbackClientService clientService = getClientServiceByName(request.getName());
+            clientService.send(request, new Callback() {
+                @Override
+                public void onReceive(final Object message) {
+                    if (message instanceof Response) {
+                        ctx.executor().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                ctx.writeAndFlush(message);
+                            }
+                        });
+                    }
+
+                }
+            });
         }
 
 
@@ -44,10 +59,10 @@ public class BusDispatcherHandler extends ChannelHandlerAdapter {
      * @return
      * @throws Exception
      */
-    private ForestClientService getClientServiceByName(String name) throws Exception {
-        ForestClientService clientService = nameClientMap.get(name);
+    private CallbackClientService getClientServiceByName(String name) throws Exception {
+        CallbackClientService clientService = nameClientMap.get(name);
         if (clientService == null) {
-            clientService = new ForestClientService(name);
+            clientService = new CallbackClientService(name);
             nameClientMap.put(name, clientService);
         }
         return clientService;

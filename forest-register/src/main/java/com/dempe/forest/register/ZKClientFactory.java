@@ -1,5 +1,6 @@
 package com.dempe.forest.register;
 
+import org.aeonbits.owner.ConfigFactory;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
@@ -14,6 +15,7 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 public class ZKClientFactory {
 
     public static CuratorFramework getZKClient() {
-        return CuratorFrameworkFactory.newClient("localhost:2181", new ExponentialBackoffRetry(1000, 3));
+        ZKConfig cfg = ConfigFactory.create(ZKConfig.class);
+        return CuratorFrameworkFactory.newClient(cfg.connStr(), new ExponentialBackoffRetry(1000, 3));
     }
 }
