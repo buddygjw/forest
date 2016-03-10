@@ -25,9 +25,9 @@ import java.util.List;
  * Time: 11:01
  * To change this template use File | Settings | File Templates.
  */
-public class HACallbackClient extends HAProxy<Client> {
+public class DefaultHAClient extends HAProxy<Client> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(HACallbackClient.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(DefaultHAClient.class);
 
     private ForestNameService forestNameService;
 
@@ -37,11 +37,11 @@ public class HACallbackClient extends HAProxy<Client> {
      * @param strategy
      * @param period
      */
-    public HACallbackClient(String name, Strategy strategy, long period) throws Exception {
+    public DefaultHAClient(String name, Strategy strategy, long period) throws Exception {
         super(strategy, name, period);
     }
 
-    public HACallbackClient(String name) throws Exception {
+    public DefaultHAClient(String name) throws Exception {
         this(name, Strategy.DEFAULT, 1000L);
     }
 

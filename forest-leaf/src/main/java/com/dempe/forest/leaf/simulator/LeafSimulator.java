@@ -1,6 +1,6 @@
 package com.dempe.forest.leaf.simulator;
 
-import com.dempe.forest.client.ha.FutureClientService;
+import com.dempe.forest.client.ha.DefaultClientService;
 import com.dempe.forest.common.Constants;
 import com.dempe.forest.common.protocol.Request;
 import com.dempe.forest.common.protocol.Response;
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class LeafSimulator {
 
     public static void main(String[] args) throws Exception {
-        FutureClientService clientService = new FutureClientService(Constants.FOREST_BUS_NAME);
+        DefaultClientService clientService = new DefaultClientService(Constants.FOREST_BUS_NAME);
         for (int i = 0; i < 10000; i++) {
             Request request = buildReq();
             Response response = clientService.send(request).await();

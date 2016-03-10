@@ -27,6 +27,6 @@ public class ServerHandlerInitializer extends ChannelInitializer<SocketChannel> 
         ChannelPipeline pipeline = ch.pipeline();
         pipeline.addLast("RequestDecoder", new RequestDecoder())
                 .addLast("ResponseEncoder", new DefaultEncoder())
-                .addLast("ProcessorHandler", new com.dempe.forest.core.ProcessorHandler(context));
+                .addLast("ProcessorHandler", new ProcessorHandler(context));
     }
 }

@@ -2,7 +2,7 @@ package com.dempe.forest.bus.handler;
 
 import com.dempe.forest.bus.StrategyConfig;
 import com.dempe.forest.client.Callback;
-import com.dempe.forest.client.ha.CallbackClientService;
+import com.dempe.forest.client.ha.DefaultClientService;
 import com.dempe.forest.common.protocol.Request;
 import com.dempe.forest.common.protocol.Response;
 import com.google.common.collect.Maps;
@@ -24,7 +24,7 @@ public class BusDispatcherHandler extends ChannelHandlerAdapter {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(BusDispatcherHandler.class);
 
-    private final static Map<String, CallbackClientService> nameClientMap = Maps.newConcurrentMap();
+    private final static Map<String, DefaultClientService> nameClientMap = Maps.newConcurrentMap();
     private static StrategyConfig strategyConfig = ConfigFactory.create(StrategyConfig.class);
 
     @Override
@@ -33,7 +33,7 @@ public class BusDispatcherHandler extends ChannelHandlerAdapter {
         if (msg instanceof Request) {
             Request request = (Request) msg;
             LOGGER.info("dispatcher request = {}", request);
-            CallbackClientService clientService = getClientServiceByName(request.getName());
+            DefaultClientService clientService = getClientServiceByName(request.getName());
             clientService.send(request, new Callback() {
                 @Override
                 public void onReceive(final Object message) {
@@ -62,10 +62,10 @@ public class BusDispatcherHandler extends ChannelHandlerAdapter {
      * @return
      * @throws Exception
      */
-    private CallbackClientService getClientServiceByName(String name) throws Exception {
-        CallbackClientService clientService = nameClientMap.get(name);
+    private DefaultClientService getClientServiceByName(String name) throws Exception {
+        DefaultClientService clientService = nameClientMap.get(name);
         if (clientService == null) {
-            clientService = new CallbackClientService(name, strategyConfig.loadStrategy(), strategyConfig.period());
+            clientService = new DefaultClientService(name, strategyConfig.loadStrategy(), strategyConfig.period());
             nameClientMap.put(name, clientService);
         }
         return clientService;
