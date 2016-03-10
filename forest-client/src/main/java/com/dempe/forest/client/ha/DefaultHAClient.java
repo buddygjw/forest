@@ -1,6 +1,6 @@
 package com.dempe.forest.client.ha;
 
-import com.dempe.forest.client.CallbackClient;
+import com.dempe.forest.client.DefaultClient;
 import com.dempe.forest.client.Client;
 import com.dempe.forest.common.NodeDetails;
 import com.dempe.forest.common.cluster.HAProxy;
@@ -70,7 +70,7 @@ public class DefaultHAClient extends HAProxy<Client> {
          *1s accessPolicy=5次发送失败则会自动切换client
          */
         AccessPolicy policy = new AccessPolicy(10, 1 * 1000, 5 * 1000 * 60, true);
-        CallbackClient callbackClient = new CallbackClient(serverInstance.getIp(), serverInstance.getPort());
+        DefaultClient callbackClient = new DefaultClient(serverInstance.getIp(), serverInstance.getPort());
         Client client = (Client) ProxyHandler.getProxyInstance(callbackClient, this, policy);
         return client;
     }

@@ -143,7 +143,7 @@ public class CommonClient {
         return f != null && f.channel().isActive();
     }
 
-    public void send(Request request) throws Exception {
+    public void writeAndFlush(Request request) throws Exception {
         if (!isConnected()) {
             reconnect();
         }

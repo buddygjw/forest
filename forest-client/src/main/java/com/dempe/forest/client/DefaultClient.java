@@ -2,6 +2,9 @@ package com.dempe.forest.client;
 
 
 import com.dempe.forest.common.protocol.Request;
+import com.dempe.forest.common.protocol.Response;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,11 +13,11 @@ import com.dempe.forest.common.protocol.Request;
  * Time: 10:33
  * To change this template use File | Settings | File Templates.
  */
-public class CallbackClient extends CommonClient implements Client {
+public class DefaultClient extends CommonClient implements Client {
 
     private int nextMessageId = 1;
 
-    public CallbackClient(String host, int port) {
+    public DefaultClient(String host, int port) {
         super(host, port);
     }
 
@@ -28,7 +31,7 @@ public class CallbackClient extends CommonClient implements Client {
     }
 
     public void sendOnly(Request request) throws Exception {
-        send(request);
+        writeAndFlush(request);
     }
 
     /**
@@ -42,8 +45,24 @@ public class CallbackClient extends CommonClient implements Client {
         request.setSeqId(id);
         Context context = new Context(id, request, callback);
         contextMap.put(id, context);
-        send(request);
+        writeAndFlush(request);
         return callback;
+    }
+    public Future<Response> send(Request request) throws Exception {
+        Promise<Response> future = new Promise<Response>();
+        send(request, future);
+        return future;
+    }
+
+
+    public Response sendAnWait(Request request) throws Exception {
+        Future<Response> future = send(request);
+        return future.await();
+    }
+
+    public Response sendAnWait(Request request, long amount, TimeUnit unit) throws Exception {
+        Future<Response> future = send(request);
+        return future.await(amount, unit);
     }
 
 
