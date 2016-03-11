@@ -482,6 +482,12 @@ public class PacketData {
         dataPackage.magicCode(ProtocolConstant.MAGIC_CODE);
         dataPackage.serviceName("test");
         dataPackage.compressType(0);
+        RpcMeta rpcMeta = new RpcMeta();
+        RequestMeta requestMeta = new RequestMeta();
+        requestMeta.setServiceName("service");
+        requestMeta.setMethodName("method");
+        rpcMeta.setRequest(requestMeta);
+        dataPackage.setRpcMeta(rpcMeta);
         // set data
         if (args != null && args.length == 1) {
             byte[] data = methodInfo.inputEncode(args[0]);
@@ -489,13 +495,18 @@ public class PacketData {
                 dataPackage.data(data);
             }
         }
-
-        // set logid
-        // if logid exsit under thread local holder
-        Long elogId = 111L;
-
-
         return dataPackage;
+    }
+
+    public static void main(String[] args) throws IOException {
+        PacketData packetData = buildRpcDataPackage(null,new Object[]{});
+        byte[] write = packetData.write();
+        System.out.println(write.length);
+        PacketData readData = new PacketData();
+        readData.read(write);
+        Integer compressType = readData.getRpcMeta().getCompressType();
+        System.out.println(compressType);
+        System.out.println(readData.getRpcMeta().getRequest().getSerivceName());
     }
 
 }

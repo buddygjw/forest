@@ -205,9 +205,7 @@ public class RpcMeta implements Readable, Writerable, Cloneable {
         this.authenticationData = authenticationData;
     }
 
-    /* (non-Javadoc)
-     * @see com.baidu.jprotobuf.remoting.pbrpc.Writerable#write()
-     */
+
     public byte[] write() {
         try {
             return CODEC.encode(this);
@@ -216,9 +214,7 @@ public class RpcMeta implements Readable, Writerable, Cloneable {
         }
     }
 
-    /* (non-Javadoc)
-     * @see com.baidu.jprotobuf.remoting.pbrpc.Readable#read(byte[])
-     */
+
     public void read(byte[] bytes) {
         if (bytes == null) {
             throw new IllegalArgumentException("param 'bytes' is null.");
