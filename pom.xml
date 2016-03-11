@@ -15,15 +15,18 @@
         <module>forest-leaf</module>
         <module>forest-client</module>
         <module>forest-core</module>
+        <module>forest-rpc</module>
     </modules>
 
 
-    <!--<repositories>-->
-    <!--<repository>-->
-    <!--<id>nexus-osc-thirdparty</id>-->
-    <!--<url>http://maven.oschina.net/content/repositories/thirdparty/</url>-->
-    <!--</repository>-->
-    <!--</repositories>-->
+
+
+    <repositories>
+        <repository>
+            <id>oss</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
 
 
     <build>

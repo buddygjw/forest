@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class CommonClient {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommonClient.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(CommonClient.class);
 
     protected Bootstrap b;
 
@@ -143,7 +143,7 @@ public class CommonClient {
         return f != null && f.channel().isActive();
     }
 
-    public void writeAndFlush(Request request) throws Exception {
+    public void writeAndFlush(Object request) throws Exception {
         if (!isConnected()) {
             reconnect();
         }
@@ -152,7 +152,7 @@ public class CommonClient {
 
     public static class Context {
         final Request request;
-        final Callback cb;
+        public final Callback cb;
         private final short id;
 
         Context(int id, Request request, Callback cb) {

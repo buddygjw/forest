@@ -63,6 +63,7 @@ public class ForestNameService implements NameService {
     public void register(NodeDetails node) throws Exception {
         nameClient = new ForestNameClient(zkClient, PATH, node);
         nameClient.start();
+
     }
 
     @Override

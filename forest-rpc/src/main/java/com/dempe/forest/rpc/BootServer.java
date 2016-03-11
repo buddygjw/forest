@@ -1,4 +1,4 @@
-package com.dempe.forest.core;
+package com.dempe.forest.rpc;
 
 
 import com.dempe.forest.common.AppConfig;
@@ -28,32 +28,27 @@ import java.io.IOException;
  * To change this template use File | Settings | File Templates.
  */
 
-public class BootServer implements Server {
+public class BootServer{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BootServer.class);
 
-    ApplicationContext context;
+//    ApplicationContext context;
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
     private ServerBootstrap b;
     private DefaultEventExecutorGroup executorGroup;
-    private AppConfig config;
-    private ServerContext Servercontext;
+//    private AppConfig config;
     private ForestNameService forestNameService;
     private ChannelInitializer channelInitializer;
 
 
-    public BootServer(AppConfig config, ApplicationContext context) {
-        this.config = config;
-        this.context = context;
-        Servercontext = new ServerContext(config, context);
+    public BootServer() {
+
         init();
     }
 
-    public BootServer(AppConfig config, ApplicationContext context, ChannelInitializer channelInitializer) {
-        this.config = config;
-        this.context = context;
-        Servercontext = new com.dempe.forest.core.ServerContext(config, context);
+    public BootServer( ChannelInitializer channelInitializer) {
+
         this.channelInitializer = channelInitializer;
         init();
     }
@@ -62,7 +57,7 @@ public class BootServer implements Server {
     public void init() {
         executorGroup = new DefaultEventExecutorGroup(Runtime.getRuntime().availableProcessors(), new DefaultThreadFactory("decode-worker-thread-pool"));
         if (channelInitializer == null) {
-            channelInitializer = new ServerHandlerInitializer(Servercontext);
+            channelInitializer = new ServerHandlerInitializer();
         }
         init(channelInitializer);
 
@@ -78,8 +73,7 @@ public class BootServer implements Server {
 
     public void start() throws IOException {
         try {
-            ChannelFuture f = b.bind(config.port()).sync();
-            LOGGER.info("server start:{}", config.port());
+            ChannelFuture f = b.bind(8888).sync();
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             LOGGER.error(e.getMessage(), e);
@@ -94,8 +88,8 @@ public class BootServer implements Server {
         b = new ServerBootstrap();
         b.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
-                .option(ChannelOption.TCP_NODELAY, config.tcpNoDelay())
-                .option(ChannelOption.SO_KEEPALIVE, config.soKeepAlive())
+//                .option(ChannelOption.TCP_NODELAY, true)
+//                .option(ChannelOption.SO_KEEPALIVE, config.soKeepAlive())
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(channelInitializer);
     }
