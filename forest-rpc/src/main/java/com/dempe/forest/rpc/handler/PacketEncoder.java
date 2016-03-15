@@ -16,7 +16,7 @@
 
 package com.dempe.forest.rpc.handler;
 
-import com.dempe.forest.rpc.protocol.PacketData;
+import com.dempe.forest.rpc.transport.protocol.PacketData;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -89,7 +89,6 @@ public class PacketEncoder extends MessageToMessageEncoder<PacketData> {
             out.add(encodedMessage);
             return;
         }
-
         List<PacketData> list = dataPackage.chunk(chunkSize);
         for (PacketData rpcDataPackage : list) {
             encodeBytes = rpcDataPackage.write();

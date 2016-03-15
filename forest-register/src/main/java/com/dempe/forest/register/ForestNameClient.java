@@ -1,6 +1,5 @@
 package com.dempe.forest.register;
 
-import com.dempe.forest.common.NodeDetails;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.utils.CloseableUtils;
 import org.apache.curator.x.discovery.ServiceDiscovery;

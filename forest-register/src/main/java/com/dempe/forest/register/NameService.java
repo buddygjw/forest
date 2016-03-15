@@ -1,6 +1,5 @@
 package com.dempe.forest.register;
 
-import com.dempe.forest.common.NodeDetails;
 import org.apache.curator.x.discovery.ServiceInstance;
 
 import java.util.Collection;

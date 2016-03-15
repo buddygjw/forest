@@ -17,11 +17,11 @@
 package com.dempe.forest.rpc.handler;
 
 
-import com.dempe.forest.rpc.compress.Compress;
-import com.dempe.forest.rpc.compress.GZipCompress;
-import com.dempe.forest.rpc.compress.SnappyCompress;
-import com.dempe.forest.rpc.protocol.PacketData;
-import com.dempe.forest.rpc.protocol.RpcMeta;
+import com.dempe.forest.rpc.transport.compress.Compress;
+import com.dempe.forest.rpc.transport.compress.GZipCompress;
+import com.dempe.forest.rpc.transport.compress.SnappyCompress;
+import com.dempe.forest.rpc.transport.protocol.PacketData;
+import com.dempe.forest.rpc.transport.protocol.RpcMeta;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
@@ -30,34 +30,34 @@ import java.util.List;
 
 /**
  * Do data compress handler
- * 
+ *
  * @author xiemalin
  * @since 1.4
  */
 @Sharable
 public class CompressHandler extends
-		MessageToMessageEncoder<PacketData> {
+        MessageToMessageEncoder<PacketData> {
 
-	@Override
-	protected void encode(ChannelHandlerContext ctx, PacketData msg,
-			List<Object> out) throws Exception {
-		PacketData dataPackage = (PacketData) msg;
+    @Override
+    protected void encode(ChannelHandlerContext ctx, PacketData msg,
+                          List<Object> out) throws Exception {
+        PacketData dataPackage = msg;
 
-		// check if do compress
-		Integer compressType = dataPackage.getRpcMeta().getCompressType();
-		Compress compress = null;
-		if (compressType == RpcMeta.COMPRESS_GZIP) {
-			compress = new GZipCompress();
-		} else if (compressType == RpcMeta.COMPRESS_SNAPPY) {
-		    compress = new SnappyCompress();
-		}
+        // check if do compress
+        Integer compressType = dataPackage.getRpcMeta().getCompressType();
+        Compress compress = null;
+        if (compressType == RpcMeta.COMPRESS_GZIP) {
+            compress = new GZipCompress();
+        } else if (compressType == RpcMeta.COMPRESS_SNAPPY) {
+            compress = new SnappyCompress();
+        }
 
-		if (compress != null) {
-			byte[] data = dataPackage.getData();
-			data = compress.compress(data);
-			dataPackage.data(data);
-		}
-		out.add(dataPackage);
-	}
+        if (compress != null) {
+            byte[] data = dataPackage.getData();
+            data = compress.compress(data);
+            dataPackage.data(data);
+        }
+        out.add(dataPackage);
+    }
 
 }

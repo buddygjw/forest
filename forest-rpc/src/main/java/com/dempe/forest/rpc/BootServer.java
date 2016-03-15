@@ -1,12 +1,9 @@
 package com.dempe.forest.rpc;
 
 
-import com.dempe.forest.common.AppConfig;
-import com.dempe.forest.register.ForestNameService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -16,7 +13,6 @@ import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 
@@ -28,27 +24,24 @@ import java.io.IOException;
  * To change this template use File | Settings | File Templates.
  */
 
-public class BootServer{
+public class BootServer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BootServer.class);
 
-//    ApplicationContext context;
+    //    ApplicationContext context;
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
     private ServerBootstrap b;
     private DefaultEventExecutorGroup executorGroup;
-//    private AppConfig config;
-    private ForestNameService forestNameService;
+    //    private AppConfig config;
     private ChannelInitializer channelInitializer;
 
 
     public BootServer() {
-
         init();
     }
 
-    public BootServer( ChannelInitializer channelInitializer) {
-
+    public BootServer(ChannelInitializer channelInitializer) {
         this.channelInitializer = channelInitializer;
         init();
     }
@@ -56,18 +49,8 @@ public class BootServer{
 
     public void init() {
         executorGroup = new DefaultEventExecutorGroup(Runtime.getRuntime().availableProcessors(), new DefaultThreadFactory("decode-worker-thread-pool"));
-        if (channelInitializer == null) {
-            channelInitializer = new ServerHandlerInitializer();
-        }
         init(channelInitializer);
 
-    }
-
-    public BootServer registerNameService() throws Exception {
-        forestNameService = new ForestNameService();
-        forestNameService.start();
-        forestNameService.register();
-        return this;
     }
 
 
@@ -82,7 +65,7 @@ public class BootServer{
         }
     }
 
-    private void init(ChannelInitializer channelInitializer) {
+    public void init(ChannelInitializer channelInitializer) {
         bossGroup = new NioEventLoopGroup();
         workerGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors() * 2);
         b = new ServerBootstrap();
@@ -100,9 +83,7 @@ public class BootServer{
             bossGroup.shutdownGracefully();
         if (workerGroup != null)
             workerGroup.shutdownGracefully();
-        if (forestNameService != null) {
-            forestNameService.close();
-        }
+
     }
 
     public BootServer stopWithJVMShutdown() {

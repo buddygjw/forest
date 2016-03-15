@@ -1,6 +1,5 @@
 package com.dempe.forest.register;
 
-import com.dempe.forest.common.NodeDetails;
 import com.google.common.collect.Lists;
 import org.aeonbits.owner.ConfigFactory;
 import org.apache.curator.framework.CuratorFramework;
